@@ -1,61 +1,90 @@
-import { Radio, Button, Typography } from 'antd';
+﻿import { Alert, Button, Card, Radio, Space, Tag } from 'antd';
 import { useState } from 'react';
 import type { QuizTask } from '@/entities/task/model/task.types';
-
 import type { TaskAttempt } from '@/entities/task/model/taskAttempt.types';
 import { useTaskSubmit } from '../api/useTaskSubmit';
-
-const { Text } = Typography;
+import { Markdown } from '@/shared/ui/Markdown';
+import { palette } from '@/shared/config/theme';
 
 type Props = {
 	task: QuizTask;
 	lessonId: number;
 };
 
+const toInitialAttempt = (task: QuizTask): TaskAttempt | null => {
+	if (task.attempt) {
+		return task.attempt;
+	}
+
+	if (task.attempt_status) {
+		return {
+			id: task.id,
+			status: task.attempt_status,
+			is_correct: task.is_correct,
+		};
+	}
+
+	return null;
+};
+
 export const QuizTaskComponent = ({ task, lessonId }: Props) => {
 	const [value, setValue] = useState<string>('');
-	const [result, setResult] = useState<TaskAttempt | null>(null);
-
+	const [result, setResult] = useState<TaskAttempt | null>(() => toInitialAttempt(task));
 	const submit = useTaskSubmit();
+
+	const options = Array.isArray(task.options) ? task.options : [];
 
 	const handleSubmit = () => {
 		submit.mutate(
 			{ taskId: task.id, lessonId, answer: value },
 			{
-				onSuccess: (res) => {
-					setResult(res);
-				},
+				onSuccess: (res) => setResult(res),
 			},
 		);
 	};
 
 	return (
-		<div>
-			<p>{task.question}</p>
+		<Card style={{ borderColor: palette.pink }}>
+			<Markdown content={task.question} />
 
-			<Radio.Group onChange={(e) => setValue(e.target.value)} value={value}>
-				{task.options.map((option) => (
-					<Radio key={option} value={option}>
-						{option}
-					</Radio>
-				))}
-			</Radio.Group>
-
-			<div style={{ marginTop: 12 }}>
-				<Button type='primary' onClick={handleSubmit} disabled={!value}>
-					Проверить
-				</Button>
-			</div>
-
-			{result?.status === 'checked' && (
+			{result?.status === 'pending' && (
 				<div style={{ marginTop: 8 }}>
-					{result.is_correct ? (
-						<Text type='success'>Правильно </Text>
-					) : (
-						<Text type='danger'>Неправильно ❌</Text>
-					)}
+					<Tag color='processing'>На проверке</Tag>
 				</div>
 			)}
-		</div>
+
+			<Radio.Group
+				onChange={(e) => setValue(e.target.value)}
+				value={value}
+				style={{ width: '100%', marginTop: 12 }}
+			>
+				<Space orientation='vertical' style={{ width: '100%' }}>
+					{options.map((option) => (
+						<Card key={option} bodyStyle={{ padding: 10 }}>
+							<Radio value={option}>{option}</Radio>
+						</Card>
+					))}
+				</Space>
+			</Radio.Group>
+
+			<Button
+				type='primary'
+				onClick={handleSubmit}
+				disabled={!value || submit.isPending}
+				loading={submit.isPending}
+				style={{ marginTop: 14, color: palette.navy, fontWeight: 700 }}
+			>
+				Проверить ответ
+			</Button>
+
+			{result?.status === 'checked' && (
+				<Alert
+					style={{ marginTop: 12 }}
+					type={result.is_correct ? 'success' : 'error'}
+					message={result.is_correct ? 'Верный ответ' : 'Попробуйте еще раз'}
+				/>
+			)}
+		</Card>
 	);
 };
+

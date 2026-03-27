@@ -9,9 +9,10 @@ export const useMe = () => {
 	const setUser = useAuthStore((s) => s.setUser);
 
 	const query = useQuery<User>({
-		queryKey: ['me'],
+		queryKey: ['me', token],
 		queryFn: authApi.me,
 		enabled: !!token,
+		staleTime: 60_000,
 	});
 
 	useEffect(() => {

@@ -1,0 +1,21 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+:root {
+	color-scheme: light;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: 'Nunito', 'Segoe UI', sans-serif;
+	background: radial-gradient(circle at 10% 0%, #fffde8 0%, #fffdf5 45%, #fdf7ff 100%);
+	color: #243168;
+}
+
+#root {
+	min-height: 100vh;
+}
+

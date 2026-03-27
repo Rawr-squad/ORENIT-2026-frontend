@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+﻿import { useMutation } from '@tanstack/react-query';
 import { authApi } from '@/shared/api/auth.api';
 import type { RegisterRequest } from '@/shared/types/auth';
 
@@ -7,3 +7,4 @@ export const useRegister = () => {
 		mutationFn: (data: RegisterRequest) => authApi.register(data),
 	});
 };
+

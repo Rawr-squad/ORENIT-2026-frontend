@@ -1,10 +1,10 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { taskApi } from '../api/task.api';
 import type { TaskAttempt } from '@/entities/task/model/taskAttempt.types';
 
 type SubmitPayload = {
 	taskId: number;
-	lessonId: number; // ✅ добавляем
+	lessonId: number; // нужен для инвалидации конкретного урока
 	answer: string;
 };
 
@@ -25,3 +25,4 @@ export const useTaskSubmit = () => {
 		},
 	});
 };
+

@@ -1,4 +1,4 @@
-import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminModuleApi } from './module.api';
 
 export const useCreateModule = () => {
@@ -6,11 +6,9 @@ export const useCreateModule = () => {
 
 	return useMutation({
 		mutationFn: adminModuleApi.create,
-
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: ['courses'],
-			});
+		onSuccess: (_, variables) => {
+			queryClient.invalidateQueries({ queryKey: ['courses'] });
+			queryClient.invalidateQueries({ queryKey: ['course', variables.course_id] });
 		},
 	});
 };

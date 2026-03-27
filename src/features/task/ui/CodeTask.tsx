@@ -1,11 +1,12 @@
-import { Button, Select, Typography, message } from 'antd';
-import { useState } from 'react';
-import Editor from '@monaco-editor/react';
+import { lazy, Suspense, useMemo, useState } from 'react';
+import { Alert, App, Button, Card, Select, Spin, Tag } from 'antd';
 import type { CodeTask as CodeTaskType } from '@/entities/task/model/task.types';
 import type { TaskAttempt } from '@/entities/task/model/taskAttempt.types';
 import { useTaskSubmit } from '../api/useTaskSubmit';
+import { palette } from '@/shared/config/theme';
+import { Markdown } from '@/shared/ui/Markdown';
 
-const { Text } = Typography;
+const MonacoEditor = lazy(() => import('@monaco-editor/react'));
 
 type Props = {
 	task: CodeTaskType;
@@ -14,42 +15,93 @@ type Props = {
 
 type Language = 'javascript' | 'python' | 'cpp';
 
-export const CodeTaskComponent = ({ task, lessonId }: Props) => {
-	const [code, setCode] = useState<string>('');
-	const [language, setLanguage] = useState<Language>('javascript');
-	const [result, setResult] = useState<TaskAttempt | null>(null);
+const toInitialAttempt = (task: CodeTaskType): TaskAttempt | null => {
+	if (task.attempt) {
+		return task.attempt;
+	}
 
+	if (task.attempt_status) {
+		return {
+			id: task.id,
+			status: task.attempt_status,
+			is_correct: task.is_correct,
+		};
+	}
+
+	return null;
+};
+
+const canSubmitCode = (attempt: TaskAttempt | null) => {
+	if (!attempt) {
+		return true;
+	}
+
+	if (attempt.status === 'pending') {
+		return false;
+	}
+
+	if (attempt.status === 'checked' && attempt.is_correct !== false) {
+		return false;
+	}
+
+	return true;
+};
+
+const formatCodeSubmission = (value: string, language: Language): string =>
+	`\`\`\`${language}\n${value}\n\`\`\``;
+
+export const CodeTaskComponent = ({ task, lessonId }: Props) => {
+	const { message } = App.useApp();
+	const [code, setCode] = useState('');
+	const [language, setLanguage] = useState<Language>('javascript');
 	const submit = useTaskSubmit();
 
+	const result = useMemo(() => {
+		const serverResult = toInitialAttempt(task);
+		if (serverResult) {
+			return serverResult;
+		}
+		return submit.data ?? null;
+	}, [submit.data, task]);
+
+	const canSubmit = useMemo(() => canSubmitCode(result), [result]);
+
 	const handleSubmit = () => {
+		if (!canSubmit) {
+			message.info('Сейчас отправка недоступна. Дождитесь результата проверки.');
+			return;
+		}
+
 		submit.mutate(
 			{
 				taskId: task.id,
 				lessonId,
-				answer: JSON.stringify({
-					code,
-					language,
-				}),
+				answer: formatCodeSubmission(code, language),
 			},
 			{
-				onSuccess: (data: TaskAttempt) => {
-					setResult(data);
-				},
-				onError: () => {
-					message.error('Ошибка при отправке кода');
-				},
+				onError: () => message.error('Не удалось отправить код'),
 			},
 		);
 	};
 
 	return (
-		<div>
-			<p>{task.question}</p>
+		<Card style={{ borderColor: palette.pink }}>
+			<Markdown content={task.question} />
+
+			<div style={{ marginTop: 10 }}>
+				{result?.status === 'pending' && <Tag color='processing'>На проверке</Tag>}
+				{result?.status === 'checked' && result.is_correct === true && (
+					<Tag color='success'>Проверено: верно</Tag>
+				)}
+				{result?.status === 'checked' && result.is_correct === false && (
+					<Tag color='error'>Проверено: неверно, можно повторить</Tag>
+				)}
+			</div>
 
 			<Select<Language>
 				value={language}
-				onChange={(value) => setLanguage(value)}
-				style={{ marginBottom: 8, width: 200 }}
+				onChange={setLanguage}
+				style={{ marginTop: 12, width: 180 }}
 				options={[
 					{ value: 'javascript', label: 'JavaScript' },
 					{ value: 'python', label: 'Python' },
@@ -57,43 +109,55 @@ export const CodeTaskComponent = ({ task, lessonId }: Props) => {
 				]}
 			/>
 
-			<Editor
-				height='300px'
-				language={language}
-				value={code}
-				onChange={(value: string | undefined) => setCode(value ?? '')}
-				options={{
-					minimap: { enabled: false },
-					fontSize: 14,
-				}}
-			/>
-
-			<div style={{ marginTop: 12 }}>
-				<Button
-					type='primary'
-					onClick={handleSubmit}
-					disabled={!code || submit.isPending}
-					loading={submit.isPending}
-				>
-					Отправить код
-				</Button>
+			<div style={{ marginTop: 12, borderRadius: 12, overflow: 'hidden' }}>
+				<Suspense fallback={<Spin style={{ display: 'block', margin: '48px auto' }} />}>
+					<MonacoEditor
+						height='300px'
+						language={language}
+						value={code}
+						onChange={(value) => setCode(value ?? '')}
+						options={{
+							minimap: { enabled: false },
+							fontSize: 14,
+							readOnly: !canSubmit,
+						}}
+					/>
+				</Suspense>
 			</div>
 
+			<Button
+				type='primary'
+				onClick={handleSubmit}
+				disabled={!code || submit.isPending || !canSubmit}
+				loading={submit.isPending}
+				style={{ marginTop: 14, color: palette.navy, fontWeight: 700 }}
+			>
+				Отправить код
+			</Button>
+
 			{result?.status === 'pending' && (
-				<div style={{ marginTop: 8 }}>
-					<Text>Отправлено на проверку</Text>
-				</div>
+				<Alert
+					style={{ marginTop: 12 }}
+					type='info'
+					message='Код отправлен на проверку. Повторная отправка заблокирована до результата.'
+				/>
 			)}
 
-			{result?.status === 'checked' && (
-				<div style={{ marginTop: 8 }}>
-					{result.is_correct ? (
-						<Text type='success'>Правильно</Text>
-					) : (
-						<Text type='danger'>Неправильно</Text>
-					)}
-				</div>
+			{result?.status === 'checked' && result.is_correct === true && (
+				<Alert style={{ marginTop: 12 }} type='success' message='Решение принято.' />
 			)}
-		</div>
+
+			{result?.status === 'checked' && result.is_correct === false && (
+				<Alert
+					style={{ marginTop: 12 }}
+					type='error'
+					message='Неверное решение. Можно отправить еще одну попытку.'
+				/>
+			)}
+
+			{result?.feedback && (
+				<Alert style={{ marginTop: 12 }} type='info' message={result.feedback} />
+			)}
+		</Card>
 	);
 };
