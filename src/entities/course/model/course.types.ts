@@ -34,3 +34,10 @@ export type ModuleCreate = {
 	title: string;
 	order: number;
 };
+
+export type LessonCreate = {
+	module_id: number;
+	title: string;
+	theory_content: string;
+	order: number;
+};
