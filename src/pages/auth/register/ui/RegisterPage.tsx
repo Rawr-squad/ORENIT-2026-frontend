@@ -47,20 +47,42 @@ export const RegisterPage = () => {
 					</Text>
 				</div>
 
-				<Form form={form} layout='vertical' onFinish={handleSubmit} requiredMark={false}>
-					<Form.Item name='nickname' label='Никнейм' rules={[{ required: true }]}>
+				<Form
+					form={form}
+					layout='vertical'
+					onFinish={handleSubmit}
+					requiredMark={false}
+				>
+					<Form.Item
+						name='nickname'
+						label='Никнейм'
+						rules={[{ required: true }]}
+					>
 						<Input placeholder='Alex' />
 					</Form.Item>
 
-					<Form.Item name='email' label='Почта' rules={[{ required: true, type: 'email' }]}>
+					<Form.Item
+						name='email'
+						label='Почта'
+						rules={[{ required: true, type: 'email' }]}
+					>
 						<Input placeholder='alex@example.com' />
 					</Form.Item>
 
-					<Form.Item name='password' label='Пароль' rules={[{ required: true, min: 6 }]}>
+					<Form.Item
+						name='password'
+						label='Пароль'
+						rules={[{ required: true, min: 6 }]}
+					>
 						<Input.Password placeholder='********' />
 					</Form.Item>
 
-					<Form.Item name='role' label='Роль' initialValue='student' rules={[{ required: true }]}>
+					<Form.Item
+						name='role'
+						label='Роль'
+						initialValue='student'
+						rules={[{ required: true }]}
+					>
 						<Select
 							options={[
 								{ value: 'student', label: 'Ученик' },
@@ -80,7 +102,13 @@ export const RegisterPage = () => {
 					</Button>
 				</Form>
 
-				<div style={{ marginTop: 14, textAlign: 'center', color: palette.textSecondary }}>
+				<div
+					style={{
+						marginTop: 14,
+						textAlign: 'center',
+						color: palette.textSecondary,
+					}}
+				>
 					Уже есть аккаунт? <Link to='/login'>Войти</Link>
 				</div>
 			</Card>
