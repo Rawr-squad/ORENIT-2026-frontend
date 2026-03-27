@@ -28,3 +28,9 @@ export type CourseCreate = {
 	title: string;
 	description: string;
 };
+
+export type ModuleCreate = {
+	course_id: number;
+	title: string;
+	order: number;
+};

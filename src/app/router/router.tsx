@@ -8,6 +8,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
 import { AdminDashboardPage } from '@/pages/admin/dashboard/ui/AdminDashboardPage';
 import { AdminCoursesPage } from '@/pages/admin/courses/ui/AdminCoursesPage';
+import { AdminCourseDetailPage } from '@/pages/admin/courses/ui/AdminCourseDetailPage';
 
 export const router = createBrowserRouter([
 	{
@@ -47,6 +48,14 @@ export const router = createBrowserRouter([
 		element: (
 			<ProtectedRoute roles={['admin']}>
 				<AdminCoursesPage />
+			</ProtectedRoute>
+		),
+	},
+	{
+		path: '/admin/courses/:id',
+		element: (
+			<ProtectedRoute roles={['admin']}>
+				<AdminCourseDetailPage />
 			</ProtectedRoute>
 		),
 	},

@@ -1,5 +1,6 @@
 import { Table, Button, Typography } from 'antd';
 import { useCoursesAdmin } from '@/features/admin/course/api/useCoursesAdmin';
+import { useNavigate } from 'react-router-dom';
 import { CreateCourseModal } from '@/features/admin/course/ui/CreateCourseModal';
 import { useState } from 'react';
 
@@ -9,6 +10,7 @@ export const AdminCoursesPage = () => {
 	const [open, setOpen] = useState(false);
 
 	const { data, isLoading } = useCoursesAdmin();
+	const navigate = useNavigate();
 
 	const columns = [
 		{
@@ -40,9 +42,12 @@ export const AdminCoursesPage = () => {
 
 			<Table
 				rowKey='id'
-				loading={isLoading}
 				dataSource={data}
 				columns={columns}
+				loading={isLoading}
+				onRow={(record) => ({
+					onClick: () => navigate(`/admin/courses/${record.id}`),
+				})}
 			/>
 		</div>
 	);
