@@ -1,18 +1,25 @@
 export type Role = 'student' | 'admin' | 'parent';
 
+export type User = {
+	id: number;
+	email: string;
+	nickname: string;
+	role: Role;
+};
+
 export type LoginRequest = {
 	email: string;
 	password: string;
 };
 
 export type LoginResponse = {
+	access_token: string;
 	token: string;
-	role: Role;
+	user: User;
 };
 
-export type RegisterRequest = {
-	email: string;
-	password: string;
+export type RegisterRequest = User & {
+	role: Exclude<Role, 'admin'>;
 };
 
 export type RegisterResponse = {

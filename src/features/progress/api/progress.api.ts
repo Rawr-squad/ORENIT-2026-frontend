@@ -1,4 +1,8 @@
 import { api } from '@/shared/api/client';
+export type LeaderboardUser = {
+	user_id: number;
+	xp: number;
+};
 
 export type ProgressResponse = {
 	xp: number;
@@ -7,18 +11,12 @@ export type ProgressResponse = {
 
 export const progressApi = {
 	getMe: async (): Promise<ProgressResponse> => {
-		/*
-     REAL
-    const res = await api.get('/progress/me');
-    return res.data;
-    */
+		const res = await api.get('/progress/me');
+		return res.data;
+	},
 
-		//  MOCK
-		await new Promise((r) => setTimeout(r, 300));
-
-		return {
-			xp: 120,
-			completed_lessons: 3,
-		};
+	getLeaderboard: async (): Promise<LeaderboardUser[]> => {
+		const res = await api.get('/progress/leaderboard');
+		return res.data;
 	},
 };

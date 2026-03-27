@@ -1,6 +1,6 @@
 import { Table, Typography } from 'antd';
 import { useLeaderboard } from '@/features/leaderboard/api/useLeaderboard';
-import type { LeaderboardUser } from '@/entities/user/model/leaderboard.types';
+import type { LeaderboardUser } from '@/features/progress/api/progress.types';
 
 const { Title } = Typography;
 

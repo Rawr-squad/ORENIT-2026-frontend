@@ -1,32 +1,29 @@
 import { Radio, Button, Typography } from 'antd';
 import { useState } from 'react';
 import type { QuizTask } from '@/entities/task/model/task.types';
-import { useSubmitTask } from '@/features/task/api/useSubmitTask';
-import { useQueryClient } from '@tanstack/react-query';
+
 import type { TaskAttempt } from '@/entities/task/model/taskAttempt.types';
+import { useTaskSubmit } from '../api/useTaskSubmit';
 
 const { Text } = Typography;
 
 type Props = {
 	task: QuizTask;
+	lessonId: number;
 };
 
-export const QuizTaskComponent = ({ task }: Props) => {
+export const QuizTaskComponent = ({ task, lessonId }: Props) => {
 	const [value, setValue] = useState<string>('');
 	const [result, setResult] = useState<TaskAttempt | null>(null);
 
-	const submit = useSubmitTask();
-	const queryClient = useQueryClient();
+	const submit = useTaskSubmit();
 
 	const handleSubmit = () => {
 		submit.mutate(
-			{ taskId: task.id, answer: value },
+			{ taskId: task.id, lessonId, answer: value },
 			{
 				onSuccess: (res) => {
 					setResult(res);
-
-					//  обновляем прогресс
-					queryClient.invalidateQueries({ queryKey: ['progress'] });
 				},
 			},
 		);

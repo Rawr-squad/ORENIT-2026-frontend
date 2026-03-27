@@ -7,7 +7,9 @@ type Props = {
 };
 
 export const ProtectedRoute = ({ children, roles }: Props) => {
-	const { token, role } = useAuthStore();
+	const { token, user } = useAuthStore();
+
+	const role = user?.role;
 
 	//  не авторизован
 	if (!token) {

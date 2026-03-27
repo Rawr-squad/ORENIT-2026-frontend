@@ -1,32 +1,42 @@
-import { Input, Button, Typography } from 'antd';
+import { Button, Select, Typography, message } from 'antd';
 import { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import type { CodeTask } from '@/entities/task/model/task.types';
-import { useSubmitTask } from '@/features/task/api/useSubmitTask';
+import Editor from '@monaco-editor/react';
+import type { CodeTask as CodeTaskType } from '@/entities/task/model/task.types';
 import type { TaskAttempt } from '@/entities/task/model/taskAttempt.types';
+import { useTaskSubmit } from '../api/useTaskSubmit';
 
 const { Text } = Typography;
-const { TextArea } = Input;
 
 type Props = {
-	task: CodeTask;
+	task: CodeTaskType;
+	lessonId: number;
 };
 
-export const CodeTaskComponent = ({ task }: Props) => {
-	const [value, setValue] = useState<string>('');
+type Language = 'javascript' | 'python' | 'cpp';
+
+export const CodeTaskComponent = ({ task, lessonId }: Props) => {
+	const [code, setCode] = useState<string>('');
+	const [language, setLanguage] = useState<Language>('javascript');
 	const [result, setResult] = useState<TaskAttempt | null>(null);
 
-	const submit = useSubmitTask();
-	const queryClient = useQueryClient();
+	const submit = useTaskSubmit();
 
 	const handleSubmit = () => {
 		submit.mutate(
-			{ taskId: task.id, answer: value },
 			{
-				onSuccess: (res) => {
-					setResult(res);
-
-					queryClient.invalidateQueries({ queryKey: ['progress'] });
+				taskId: task.id,
+				lessonId,
+				answer: JSON.stringify({
+					code,
+					language,
+				}),
+			},
+			{
+				onSuccess: (data: TaskAttempt) => {
+					setResult(data);
+				},
+				onError: () => {
+					message.error('Ошибка при отправке кода');
 				},
 			},
 		);
@@ -36,22 +46,52 @@ export const CodeTaskComponent = ({ task }: Props) => {
 		<div>
 			<p>{task.question}</p>
 
-			<TextArea
-				rows={6}
-				value={value}
-				onChange={(e) => setValue(e.target.value)}
-				placeholder='Напишите ваш код...'
+			<Select<Language>
+				value={language}
+				onChange={(value) => setLanguage(value)}
+				style={{ marginBottom: 8, width: 200 }}
+				options={[
+					{ value: 'javascript', label: 'JavaScript' },
+					{ value: 'python', label: 'Python' },
+					{ value: 'cpp', label: 'C++' },
+				]}
+			/>
+
+			<Editor
+				height='300px'
+				language={language}
+				value={code}
+				onChange={(value: string | undefined) => setCode(value ?? '')}
+				options={{
+					minimap: { enabled: false },
+					fontSize: 14,
+				}}
 			/>
 
 			<div style={{ marginTop: 12 }}>
-				<Button type='primary' onClick={handleSubmit} disabled={!value}>
-					Отправить на проверку
+				<Button
+					type='primary'
+					onClick={handleSubmit}
+					disabled={!code || submit.isPending}
+					loading={submit.isPending}
+				>
+					Отправить код
 				</Button>
 			</div>
 
 			{result?.status === 'pending' && (
 				<div style={{ marginTop: 8 }}>
-					<Text>Код отправлен на проверку 👨‍💻</Text>
+					<Text>Отправлено на проверку</Text>
+				</div>
+			)}
+
+			{result?.status === 'checked' && (
+				<div style={{ marginTop: 8 }}>
+					{result.is_correct ? (
+						<Text type='success'>Правильно</Text>
+					) : (
+						<Text type='danger'>Неправильно</Text>
+					)}
 				</div>
 			)}
 		</div>

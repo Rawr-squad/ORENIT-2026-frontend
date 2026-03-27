@@ -1,6 +1,6 @@
 import { Button, Form, Input, Card, Typography } from 'antd';
 import { useLogin } from '@/features/auth/api/useLogin';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import type { LoginRequest } from '@/shared/types/auth';
 import { useAuthStore } from '@/entities/user/model/auth.store';
 import { useEffect } from 'react';
@@ -11,38 +11,39 @@ export const LoginPage = () => {
 	const login = useLogin();
 	const navigate = useNavigate();
 
-	const token = useAuthStore((s) => s.token);
-	const isAuth = Boolean(token);
+	const { user } = useAuthStore();
 
 	useEffect(() => {
-		if (isAuth) {
-			navigate('/');
-		}
-	}, [isAuth, navigate]);
+		if (!user) return;
+
+		if (user.role === 'admin') navigate('/admin');
+		else if (user.role === 'parent') navigate('/parent');
+		else navigate('/');
+	}, [user, navigate]);
 
 	const onFinish = (values: LoginRequest) => {
-		login.mutate(values, {
-			onSuccess: (data) => {
-				const role = data.role;
-
-				if (role === 'admin') navigate('/admin');
-				else if (role === 'parent') navigate('/parent');
-				else navigate('/');
-			},
-		});
+		login.mutate(values);
 	};
 
 	return (
 		<div style={{ display: 'flex', justifyContent: 'center', marginTop: 100 }}>
 			<Card style={{ width: 350 }}>
-				<Title level={3}>Login</Title>
+				<Title level={3}>Вход</Title>
 
 				<Form layout='vertical' onFinish={onFinish}>
-					<Form.Item name='email' label='Email' required>
+					<Form.Item
+						name='email'
+						label='Электронная почта'
+						rules={[{ required: true, type: 'email' }]}
+					>
 						<Input />
 					</Form.Item>
 
-					<Form.Item name='password' label='Password' required>
+					<Form.Item
+						name='password'
+						label='Пароль'
+						rules={[{ required: true, min: 6 }]}
+					>
 						<Input.Password />
 					</Form.Item>
 
@@ -52,9 +53,13 @@ export const LoginPage = () => {
 						loading={login.isPending}
 						block
 					>
-						Login
+						Войти
 					</Button>
 				</Form>
+
+				<div style={{ marginTop: 12 }}>
+					Нет аккаунта? <Link to='/register'>Зарегистрироваться</Link>
+				</div>
 			</Card>
 		</div>
 	);

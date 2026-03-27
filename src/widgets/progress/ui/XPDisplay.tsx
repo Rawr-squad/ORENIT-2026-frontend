@@ -1,4 +1,4 @@
-import { Card, Typography, Progress } from 'antd';
+import { Card, Typography, Progress, Badge } from 'antd';
 import { useUserStore } from '@/entities/user/model/user.store';
 
 const { Text } = Typography;
@@ -14,7 +14,7 @@ export const XPDisplay = () => {
 			<Text strong>Уровень: {level}</Text>
 			<br />
 
-			<Text>XP: {xp}</Text>
+			<Badge count={`${xp} XP`} />
 
 			<Progress percent={progressPercent} showInfo={false} status='active' />
 

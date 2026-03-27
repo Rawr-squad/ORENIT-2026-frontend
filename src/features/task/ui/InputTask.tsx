@@ -1,24 +1,38 @@
-import { Input, Button, Typography } from 'antd';
+import { Input, Button, Typography, message } from 'antd';
 import { useState } from 'react';
-import type { InputTask } from '@/entities/task/model/task.types';
-import { checkAnswer } from '@/features/task/model/checkAnswer';
+import type { InputTask as InputTaskType } from '@/entities/task/model/task.types';
+import type { TaskAttempt } from '@/entities/task/model/taskAttempt.types';
+import { useTaskSubmit } from '../api/useTaskSubmit';
 
 const { Text } = Typography;
 
 type Props = {
-	task: InputTask;
+	task: InputTaskType;
+	lessonId: number;
 };
 
-export const InputTaskComponent = ({ task }: Props) => {
+export const InputTaskComponent = ({ task, lessonId }: Props) => {
 	const [value, setValue] = useState<string>('');
-	const [result, setResult] = useState<null | {
-		correct: boolean;
-		correctAnswer: string;
-	}>(null);
+	const [result, setResult] = useState<TaskAttempt | null>(null);
+
+	const submit = useTaskSubmit();
 
 	const handleSubmit = () => {
-		const res = checkAnswer(task, value);
-		setResult(res);
+		submit.mutate(
+			{
+				taskId: task.id,
+				lessonId,
+				answer: value,
+			},
+			{
+				onSuccess: (data: TaskAttempt) => {
+					setResult(data);
+				},
+				onError: () => {
+					message.error('Ошибка при отправке ответа');
+				},
+			},
+		);
 	};
 
 	return (
@@ -32,19 +46,22 @@ export const InputTaskComponent = ({ task }: Props) => {
 			/>
 
 			<div style={{ marginTop: 12 }}>
-				<Button type='primary' onClick={handleSubmit} disabled={!value}>
-					Проверить
+				<Button
+					type='primary'
+					onClick={handleSubmit}
+					disabled={!value || submit.isPending}
+					loading={submit.isPending}
+				>
+					Ответить
 				</Button>
 			</div>
 
-			{result && (
+			{result?.status === 'checked' && (
 				<div style={{ marginTop: 8 }}>
-					{result.correct ? (
-						<Text type='success'>Правильно </Text>
+					{result.is_correct ? (
+						<Text type='success'>Правильно</Text>
 					) : (
-						<Text type='danger'>
-							Неправильно ❌ (ответ: {result.correctAnswer})
-						</Text>
+						<Text type='danger'>Неправильно</Text>
 					)}
 				</div>
 			)}

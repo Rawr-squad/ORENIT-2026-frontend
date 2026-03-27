@@ -1,63 +1,44 @@
-import { Card, List, Typography } from 'antd';
+import { Card, Typography, Spin, Alert, Row, Col, Empty } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { XPDisplay } from '@/widgets/progress/ui/XPDisplay';
-import { useProgress } from '@/features/progress/api/useProgress';
-import { LeaderboardTable } from '@/widgets/leaderboard/ui/LeaderBoardTable';
-import type {
-	CourseFull,
-	CoursePreview,
-} from '@/entities/course/model/course.types';
-import { useCourses } from '@/features/admin/course/api/useCourses';
 
-const { Title } = Typography;
+import type { CoursePreview } from '@/entities/course/model/course.types';
+import { useCourses } from '@/features/course/api/useCourses';
+import { XPDisplay } from '@/widgets/progress/ui/XPDisplay';
+
+const { Title, Paragraph } = Typography;
 
 export const DashboardPage = () => {
 	const navigate = useNavigate();
 
-	useProgress();
+	const { data: courses, isLoading, isError } = useCourses();
 
-	//  MOCK
-	// const courses: Course[] = [
-	// 	{
-	// 		id: 1,
-	// 		title: 'React Basics',
-	// 		description: 'Основы React',
-	// 		modules: [],
-	// 	},
-	// 	{
-	// 		id: 2,
-	// 		title: 'JavaScript',
-	// 		description: 'Продвинутый JS',
-	// 		modules: [],
-	// 	},
-	// ];
+	if (isLoading) return <Spin style={{ marginTop: 40 }} />;
 
-	//  REAL
-	const { data: courses, isLoading } = useCourses();
+	if (isError || !courses) {
+		return <Alert type='error' title='Ошибка загрузки курсов' />;
+	}
 
 	return (
 		<div style={{ padding: 24 }}>
 			<XPDisplay />
 
-			<LeaderboardTable />
+			<Title level={2}>Курсы</Title>
 
-			<Title level={2}>Мои курсы</Title>
-
-			<List<CoursePreview>
-				grid={{ gutter: 16, column: 3 }}
-				dataSource={courses}
-				renderItem={(course) => (
-					<List.Item>
-						<Card
-							title={course.title}
-							hoverable
-							onClick={() => navigate(`/courses/${course.id}`)}
-						>
-							{course.description}
-						</Card>
-					</List.Item>
-				)}
-			/>
+			{courses.length === 0 && <Empty description='Нет курсов' />}
+			{courses.length !== 0 && (
+				<Row gutter={[16, 16]}>
+					{courses.map((course: CoursePreview) => (
+						<Col xs={24} md={12} lg={8} key={course.id}>
+							<Card hoverable onClick={() => navigate(`/courses/${course.id}`)}>
+								<Title level={4}>{course.title}</Title>
+								<Paragraph ellipsis={{ rows: 2 }}>
+									{course.description}
+								</Paragraph>
+							</Card>
+						</Col>
+					))}
+				</Row>
+			)}
 		</div>
 	);
 };

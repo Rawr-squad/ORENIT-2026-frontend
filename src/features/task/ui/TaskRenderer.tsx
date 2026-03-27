@@ -5,18 +5,19 @@ import { CodeTaskComponent } from './CodeTask';
 
 type Props = {
 	task: Task;
+	lessonId: number;
 };
 
-export const TaskRenderer = ({ task }: Props) => {
+export const TaskRenderer = ({ task, lessonId }: Props) => {
 	switch (task.type) {
 		case 'quiz':
-			return <QuizTaskComponent task={task} />;
+			return <QuizTaskComponent task={task} lessonId={lessonId} />;
 
 		case 'input':
-			return <InputTaskComponent task={task} />;
+			return <InputTaskComponent task={task} lessonId={lessonId} />;
 
 		case 'code':
-			return <CodeTaskComponent task={task} />;
+			return <CodeTaskComponent task={task} lessonId={lessonId} />;
 
 		default:
 			return null;

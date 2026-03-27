@@ -1,0 +1,2359 @@
+==============================
+FILE: ./.env
+VITE_API_URL=http://localhost:8000
+
+
+==============================
+FILE: ./.gitignore
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.vscode
+.env
+.env.*
+coverage
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+
+==============================
+FILE: ./.yarnrc.yml
+nodeLinker: node-modules
+
+
+
+==============================
+FILE: ./eslint.config.js
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import tseslint from 'typescript-eslint'
+import { defineConfig, globalIgnores } from 'eslint/config'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      js.configs.recommended,
+      tseslint.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+  },
+])
+
+
+
+==============================
+FILE: ./index.html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>frontend</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+
+
+==============================
+FILE: ./package.json
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "@tanstack/react-query": "^5.95.2",
+    "antd": "^6.3.4",
+    "axios": "^1.13.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.13.2",
+    "remark-gfm": "^4.0.1",
+    "zustand": "^5.0.12"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@eslint/js": "^9.39.4",
+    "@rolldown/plugin-babel": "^0.2.1",
+    "@tailwindcss/postcss": "^4.2.2",
+    "@types/babel__core": "^7.20.5",
+    "@types/node": "^24.12.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "autoprefixer": "^10.4.27",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.2",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.57.0",
+    "vite": "^8.0.1"
+  },
+  "packageManager": "yarn@4.13.0+sha512.5c20ba010c99815433e5c8453112165e673f1c7948d8d2b267f4b5e52097538658388ebc9f9580656d9b75c5cc996f990f611f99304a2197d4c56d21eea370e7"
+}
+
+
+
+==============================
+FILE: ./print_all_files.sh
+#!/bin/bash
+
+OUTPUT_FILE="project_dump.txt"
+
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+> "$OUTPUT_FILE"
+
+find . \
+  \( -type d \( -name ".git" -o -name "node_modules" -o -name ".yarn" \) -prune \) \
+  -o \( -type f -print \) | while IFS= read -r file; do
+
+  echo "==============================" >> "$OUTPUT_FILE"
+  echo "FILE: $file" >> "$OUTPUT_FILE"
+
+  cat "$file" 2>/dev/null >> "$OUTPUT_FILE"
+  echo -e "\n\n" >> "$OUTPUT_FILE"
+
+done
+
+echo "Готово! Данные сохранены в $OUTPUT_FILE"
+
+
+==============================
+FILE: ./project_dump.txt
+
+
+
+==============================
+FILE: ./public/favicon.svg
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="46" fill="none" viewBox="0 0 48 46"><path fill="#863bff" d="M25.946 44.938c-.664.845-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.287c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.497 0-3.578-1.842-3.578H1.237c-.92 0-1.456-1.04-.92-1.788L10.013.474c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.579 1.842 3.579h11.377c.943 0 1.473 1.088.89 1.83L25.947 44.94z" style="fill:#863bff;fill:color(display-p3 .5252 .23 1);fill-opacity:1"/><mask id="a" width="48" height="46" x="0" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha"><path fill="#000" d="M25.842 44.938c-.664.844-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.183c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.498 0-3.579-1.842-3.579H1.133c-.92 0-1.456-1.04-.92-1.787L9.91.473c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.578 1.842 3.578h11.377c.943 0 1.473 1.088.89 1.832L25.843 44.94z" style="fill:#000;fill-opacity:1"/></mask><g mask="url(#a)"><g filter="url(#b)"><ellipse cx="5.508" cy="14.704" fill="#ede6ff" rx="5.508" ry="14.704" style="fill:#ede6ff;fill:color(display-p3 .9275 .9033 1);fill-opacity:1" transform="matrix(.00324 1 1 -.00324 -4.47 31.516)"/></g><g filter="url(#c)"><ellipse cx="10.399" cy="29.851" fill="#ede6ff" rx="10.399" ry="29.851" style="fill:#ede6ff;fill:color(display-p3 .9275 .9033 1);fill-opacity:1" transform="matrix(.00324 1 1 -.00324 -39.328 7.883)"/></g><g filter="url(#d)"><ellipse cx="5.508" cy="30.487" fill="#7e14ff" rx="5.508" ry="30.487" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.814 -25.913 -14.639)scale(1 -1)"/></g><g filter="url(#e)"><ellipse cx="5.508" cy="30.599" fill="#7e14ff" rx="5.508" ry="30.599" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.814 -32.644 -3.334)scale(1 -1)"/></g><g filter="url(#f)"><ellipse cx="5.508" cy="30.599" fill="#7e14ff" rx="5.508" ry="30.599" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="matrix(.00324 1 1 -.00324 -34.34 30.47)"/></g><g filter="url(#g)"><ellipse cx="14.072" cy="22.078" fill="#ede6ff" rx="14.072" ry="22.078" style="fill:#ede6ff;fill:color(display-p3 .9275 .9033 1);fill-opacity:1" transform="rotate(93.35 24.506 48.493)scale(-1 1)"/></g><g filter="url(#h)"><ellipse cx="3.47" cy="21.501" fill="#7e14ff" rx="3.47" ry="21.501" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.009 28.708 47.59)scale(-1 1)"/></g><g filter="url(#i)"><ellipse cx="3.47" cy="21.501" fill="#7e14ff" rx="3.47" ry="21.501" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(89.009 28.708 47.59)scale(-1 1)"/></g><g filter="url(#j)"><ellipse cx=".387" cy="8.972" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(39.51 .387 8.972)"/></g><g filter="url(#k)"><ellipse cx="47.523" cy="-6.092" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 47.523 -6.092)"/></g><g filter="url(#l)"><ellipse cx="41.412" cy="6.333" fill="#47bfff" rx="5.971" ry="9.665" style="fill:#47bfff;fill:color(display-p3 .2799 .748 1);fill-opacity:1" transform="rotate(37.892 41.412 6.333)"/></g><g filter="url(#m)"><ellipse cx="-1.879" cy="38.332" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 -1.88 38.332)"/></g><g filter="url(#n)"><ellipse cx="-1.879" cy="38.332" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 -1.88 38.332)"/></g><g filter="url(#o)"><ellipse cx="35.651" cy="29.907" fill="#7e14ff" rx="4.407" ry="29.108" style="fill:#7e14ff;fill:color(display-p3 .4922 .0767 1);fill-opacity:1" transform="rotate(37.892 35.651 29.907)"/></g><g filter="url(#p)"><ellipse cx="38.418" cy="32.4" fill="#47bfff" rx="5.971" ry="15.297" style="fill:#47bfff;fill:color(display-p3 .2799 .748 1);fill-opacity:1" transform="rotate(37.892 38.418 32.4)"/></g></g><defs><filter id="b" width="60.045" height="41.654" x="-19.77" y="16.149" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="7.659"/></filter><filter id="c" width="90.34" height="51.437" x="-54.613" y="-7.533" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="7.659"/></filter><filter id="d" width="79.355" height="29.4" x="-49.64" y="2.03" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="e" width="79.579" height="29.4" x="-45.045" y="20.029" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="f" width="79.579" height="29.4" x="-43.513" y="21.178" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="g" width="74.749" height="58.852" x="15.756" y="-17.901" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="7.659"/></filter><filter id="h" width="61.377" height="25.362" x="23.548" y="2.284" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="i" width="61.377" height="25.362" x="23.548" y="2.284" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="j" width="56.045" height="63.649" x="-27.636" y="-22.853" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="k" width="54.814" height="64.646" x="20.116" y="-38.415" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="l" width="33.541" height="35.313" x="24.641" y="-11.323" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="m" width="54.814" height="64.646" x="-29.286" y="6.009" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="n" width="54.814" height="64.646" x="-29.286" y="6.009" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="o" width="54.814" height="64.646" x="8.244" y="-2.416" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter><filter id="p" width="39.409" height="43.623" x="18.713" y="10.588" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17158" stdDeviation="4.596"/></filter></defs></svg>
+
+
+==============================
+FILE: ./public/icons.svg
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="bluesky-icon" viewBox="0 0 16 17">
+    <g clip-path="url(#bluesky-clip)"><path fill="#08060d" d="M7.75 7.735c-.693-1.348-2.58-3.86-4.334-5.097-1.68-1.187-2.32-.981-2.74-.79C.188 2.065.1 2.812.1 3.251s.241 3.602.398 4.13c.52 1.744 2.367 2.333 4.07 2.145-2.495.37-4.71 1.278-1.805 4.512 3.196 3.309 4.38-.71 4.987-2.746.608 2.036 1.307 5.91 4.93 2.746 2.72-2.746.747-4.143-1.747-4.512 1.702.189 3.55-.4 4.07-2.145.156-.528.397-3.691.397-4.13s-.088-1.186-.575-1.406c-.42-.19-1.06-.395-2.741.79-1.755 1.24-3.64 3.752-4.334 5.099"/></g>
+    <defs><clipPath id="bluesky-clip"><path fill="#fff" d="M.1.85h15.3v15.3H.1z"/></clipPath></defs>
+  </symbol>
+  <symbol id="discord-icon" viewBox="0 0 20 19">
+    <path fill="#08060d" d="M16.224 3.768a14.5 14.5 0 0 0-3.67-1.153c-.158.286-.343.67-.47.976a13.5 13.5 0 0 0-4.067 0c-.128-.306-.317-.69-.476-.976A14.4 14.4 0 0 0 3.868 3.77C1.546 7.28.916 10.703 1.231 14.077a14.7 14.7 0 0 0 4.5 2.306q.545-.748.965-1.587a9.5 9.5 0 0 1-1.518-.74q.191-.14.372-.293c2.927 1.369 6.107 1.369 8.999 0q.183.152.372.294-.723.437-1.52.74.418.838.963 1.588a14.6 14.6 0 0 0 4.504-2.308c.37-3.911-.63-7.302-2.644-10.309m-9.13 8.234c-.878 0-1.599-.82-1.599-1.82 0-.998.705-1.82 1.6-1.82.894 0 1.614.82 1.599 1.82.001 1-.705 1.82-1.6 1.82m5.91 0c-.878 0-1.599-.82-1.599-1.82 0-.998.705-1.82 1.6-1.82.893 0 1.614.82 1.599 1.82 0 1-.706 1.82-1.6 1.82"/>
+  </symbol>
+  <symbol id="documentation-icon" viewBox="0 0 21 20">
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="m15.5 13.333 1.533 1.322c.645.555.967.833.967 1.178s-.322.623-.967 1.179L15.5 18.333m-3.333-5-1.534 1.322c-.644.555-.966.833-.966 1.178s.322.623.966 1.179l1.534 1.321"/>
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M17.167 10.836v-4.32c0-1.41 0-2.117-.224-2.68-.359-.906-1.118-1.621-2.08-1.96-.599-.21-1.349-.21-2.848-.21-2.623 0-3.935 0-4.983.369-1.684.591-3.013 1.842-3.641 3.428C3 6.449 3 7.684 3 10.154v2.122c0 2.558 0 3.838.706 4.726q.306.383.713.671c.76.536 1.79.64 3.581.66"/>
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M3 10a2.78 2.78 0 0 1 2.778-2.778c.555 0 1.209.097 1.748-.047.48-.129.854-.503.982-.982.145-.54.048-1.194.048-1.749a2.78 2.78 0 0 1 2.777-2.777"/>
+  </symbol>
+  <symbol id="github-icon" viewBox="0 0 19 19">
+    <path fill="#08060d" fill-rule="evenodd" d="M9.356 1.85C5.05 1.85 1.57 5.356 1.57 9.694a7.84 7.84 0 0 0 5.324 7.44c.387.079.528-.168.528-.376 0-.182-.013-.805-.013-1.454-2.165.467-2.616-.935-2.616-.935-.349-.91-.864-1.143-.864-1.143-.71-.48.051-.48.051-.48.787.051 1.2.805 1.2.805.695 1.194 1.817.857 2.268.649.064-.507.27-.857.49-1.052-1.728-.182-3.545-.857-3.545-3.87 0-.857.31-1.558.8-2.104-.078-.195-.349-1 .077-2.078 0 0 .657-.208 2.14.805a7.5 7.5 0 0 1 1.946-.26c.657 0 1.328.092 1.946.26 1.483-1.013 2.14-.805 2.14-.805.426 1.078.155 1.883.078 2.078.502.546.799 1.247.799 2.104 0 3.013-1.818 3.675-3.558 3.87.284.247.528.714.528 1.454 0 1.052-.012 1.896-.012 2.156 0 .208.142.455.528.377a7.84 7.84 0 0 0 5.324-7.441c.013-4.338-3.48-7.844-7.773-7.844" clip-rule="evenodd"/>
+  </symbol>
+  <symbol id="social-icon" viewBox="0 0 20 20">
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M12.5 6.667a4.167 4.167 0 1 0-8.334 0 4.167 4.167 0 0 0 8.334 0"/>
+    <path fill="none" stroke="#aa3bff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.35" d="M2.5 16.667a5.833 5.833 0 0 1 8.75-5.053m3.837.474.513 1.035c.07.144.257.282.414.309l.93.155c.596.1.736.536.307.965l-.723.73a.64.64 0 0 0-.152.531l.207.903c.164.715-.213.991-.84.618l-.872-.52a.63.63 0 0 0-.577 0l-.872.52c-.624.373-1.003.094-.84-.618l.207-.903a.64.64 0 0 0-.152-.532l-.723-.729c-.426-.43-.289-.864.306-.964l.93-.156a.64.64 0 0 0 .412-.31l.513-1.034c.28-.562.735-.562 1.012 0"/>
+  </symbol>
+  <symbol id="x-icon" viewBox="0 0 19 19">
+    <path fill="#08060d" fill-rule="evenodd" d="M1.893 1.98c.052.072 1.245 1.769 2.653 3.77l2.892 4.114c.183.261.333.48.333.486s-.068.089-.152.183l-.522.593-.765.867-3.597 4.087c-.375.426-.734.834-.798.905a1 1 0 0 0-.118.148c0 .01.236.017.664.017h.663l.729-.83c.4-.457.796-.906.879-.999a692 692 0 0 0 1.794-2.038c.034-.037.301-.34.594-.675l.551-.624.345-.392a7 7 0 0 1 .34-.374c.006 0 .93 1.306 2.052 2.903l2.084 2.965.045.063h2.275c1.87 0 2.273-.003 2.266-.021-.008-.02-1.098-1.572-3.894-5.547-2.013-2.862-2.28-3.246-2.273-3.266.008-.019.282-.332 2.085-2.38l2-2.274 1.567-1.782c.022-.028-.016-.03-.65-.03h-.674l-.3.342a871 871 0 0 1-1.782 2.025c-.067.075-.405.458-.75.852a100 100 0 0 1-.803.91c-.148.172-.299.344-.99 1.127-.304.343-.32.358-.345.327-.015-.019-.904-1.282-1.976-2.808L6.365 1.85H1.8zm1.782.91 8.078 11.294c.772 1.08 1.413 1.973 1.425 1.984.016.017.241.02 1.05.017l1.03-.004-2.694-3.766L7.796 5.75 5.722 2.852l-1.039-.004-1.039-.004z" clip-rule="evenodd"/>
+  </symbol>
+</svg>
+
+
+
+==============================
+FILE: ./README.md
+# React + TypeScript + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+
+## React Compiler
+
+The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+
+Note: This will impact Vite dev & build performances.
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
+
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
+
+
+
+==============================
+FILE: ./src/app/providers/query-provider.tsx
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
+
+export const QueryProvider = ({ children }: { children: React.ReactNode }) => {
+	return (
+		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+	);
+};
+
+
+
+==============================
+FILE: ./src/app/router/ProtectedRoute.tsx
+import { Navigate } from 'react-router-dom';
+import { useAuthStore } from '@/entities/user/model/auth.store';
+
+type Props = {
+	children: React.ReactNode;
+	roles?: ('student' | 'admin' | 'parent')[];
+};
+
+export const ProtectedRoute = ({ children, roles }: Props) => {
+	const { token, user } = useAuthStore();
+
+	const role = user?.role;
+
+	//  не авторизован
+	if (!token) {
+		return <Navigate to='/login' replace />;
+	}
+
+	//  не та роль
+	if (roles && role && !roles.includes(role)) {
+		return <Navigate to='/' replace />;
+	}
+
+	return children;
+};
+
+
+
+==============================
+FILE: ./src/app/router/router.tsx
+import { LoginPage } from '@/pages/auth/login/ui/LoginPage';
+import { RegisterPage } from '@/pages/auth/login/ui/RegisterPage';
+import { NotFoundPage } from '@/pages/not-found/ui/NotFoundPage';
+import { CoursePage } from '@/pages/student/course/ui/CoursePage';
+import { DashboardPage } from '@/pages/student/dashboard/ui/DashboardPage';
+import { LessonPage } from '@/pages/student/lesson/ui/LessonPage';
+import { createBrowserRouter } from 'react-router-dom';
+import { ProtectedRoute } from './ProtectedRoute';
+import { AdminDashboardPage } from '@/pages/admin/dashboard/ui/AdminDashboardPage';
+import { AdminCoursesPage } from '@/pages/admin/courses/ui/AdminCoursesPage';
+import { AdminCourseDetailPage } from '@/pages/admin/courses/ui/AdminCourseDetailPage';
+
+export const router = createBrowserRouter([
+	{
+		path: '/',
+		element: (
+			<ProtectedRoute roles={['student']}>
+				<DashboardPage />
+			</ProtectedRoute>
+		),
+	},
+	{
+		path: '/courses/:id',
+		element: (
+			<ProtectedRoute roles={['student']}>
+				<CoursePage />
+			</ProtectedRoute>
+		),
+	},
+	{
+		path: '/lessons/:id',
+		element: (
+			<ProtectedRoute roles={['student']}>
+				<LessonPage />
+			</ProtectedRoute>
+		),
+	},
+	{
+		path: '/admin',
+		element: (
+			<ProtectedRoute roles={['admin']}>
+				<AdminDashboardPage />
+			</ProtectedRoute>
+		),
+	},
+	{
+		path: '/admin/courses',
+		element: (
+			<ProtectedRoute roles={['admin']}>
+				<AdminCoursesPage />
+			</ProtectedRoute>
+		),
+	},
+	{
+		path: '/admin/courses/:id',
+		element: (
+			<ProtectedRoute roles={['admin']}>
+				<AdminCourseDetailPage />
+			</ProtectedRoute>
+		),
+	},
+
+	// auth без защиты
+	{
+		path: '/login',
+		element: <LoginPage />,
+	},
+	{
+		path: '/register',
+		element: <RegisterPage />,
+	},
+	{
+		path: '*',
+		element: <NotFoundPage />,
+	},
+]);
+
+
+
+==============================
+FILE: ./src/entities/course/model/course.types.ts
+export type Lesson = {
+	id: number;
+	title: string;
+};
+
+export type Module = {
+	id: number;
+	title: string;
+	lessons: Lesson[];
+};
+
+// для списка (GET /courses)
+export type CoursePreview = {
+	id: number;
+	title: string;
+	description: string;
+};
+
+// для страницы курса (детально)
+export type CourseFull = {
+	id: number;
+	title: string;
+	description: string;
+	modules: Module[];
+};
+
+export type CourseCreate = {
+	title: string;
+	description: string;
+};
+
+export type ModuleCreate = {
+	course_id: number;
+	title: string;
+	order: number;
+};
+
+export type LessonCreate = {
+	module_id: number;
+	title: string;
+	theory_content: string;
+	order: number;
+};
+
+
+
+==============================
+FILE: ./src/entities/lesson/api/lesson.api.ts
+import { api } from '@/shared/api/client';
+
+export const lessonApi = {
+	getById: async (id: number) => {
+		const res = await api.get(`/lessons/${id}`);
+		return res.data;
+	},
+};
+
+
+
+==============================
+FILE: ./src/entities/lesson/api/useLesson.ts
+import { useQuery } from '@tanstack/react-query';
+import { lessonApi } from './lesson.api';
+import type { Lesson } from '../model/lesson.types';
+
+export const useLesson = (id: number) => {
+	return useQuery<Lesson>({
+		queryKey: ['lesson', id],
+		queryFn: () => lessonApi.getById(id),
+		enabled: !!id,
+	});
+};
+
+
+
+==============================
+FILE: ./src/entities/lesson/model/lesson.types.ts
+import type { Task } from '@/entities/task/model/task.types';
+
+export type Lesson = {
+	id: number;
+	title: string;
+	theory_content: string; // markdown
+	tasks: Task[];
+};
+
+
+
+==============================
+FILE: ./src/entities/module/api/module.api.ts
+import { api } from '@/shared/api/client';
+
+export const moduleApi = {
+	getById: async (id: number) => {
+		const res = await api.get(`/modules/${id}`);
+		console.log(res.data);
+		return res.data;
+	},
+};
+
+
+
+==============================
+FILE: ./src/entities/module/api/useModule.ts
+import { useQuery } from '@tanstack/react-query';
+import type { ModuleFull } from '../models/module.types';
+import { moduleApi } from './module.api';
+
+export const useModule = (id: number) => {
+	return useQuery<ModuleFull>({
+		queryKey: ['module', id],
+		queryFn: () => moduleApi.getById(id),
+		enabled: !!id, // важно
+	});
+};
+
+
+
+==============================
+FILE: ./src/entities/module/models/module.types.ts
+export type LessonPreview = {
+	id: number;
+	title: string;
+};
+
+export type ModuleFull = {
+	id: number;
+	title: string;
+	lessons: LessonPreview[];
+};
+
+
+
+==============================
+FILE: ./src/entities/task/model/task.types.ts
+export type TaskType = 'quiz' | 'input' | 'code';
+
+export type BaseTask = {
+	id: number;
+	type: TaskType;
+	question: string;
+};
+
+export type QuizTask = BaseTask & {
+	type: 'quiz';
+	options: string[];
+};
+
+export type InputTask = BaseTask & {
+	type: 'input';
+};
+
+export type CodeTask = BaseTask & {
+	type: 'code';
+};
+
+export type Task = QuizTask | InputTask | CodeTask;
+
+
+
+==============================
+FILE: ./src/entities/task/model/taskAttempt.types.ts
+export type TaskStatus = 'checked' | 'pending';
+
+export type TaskAttempt = {
+	id: number;
+	is_correct?: boolean;
+	status: TaskStatus;
+};
+
+export type SubmitTaskRequest = {
+	taskId: number;
+	answer: string;
+};
+
+
+
+==============================
+FILE: ./src/entities/user/model/auth.store.ts
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import type { User } from '@/shared/types/auth';
+
+type AuthState = {
+	token: string | null;
+	user: User | null;
+
+	setToken: (token: string) => void;
+	setUser: (user: User) => void;
+	logout: () => void;
+};
+
+export const useAuthStore = create<AuthState>()(
+	persist(
+		(set) => ({
+			token: null,
+			user: null,
+
+			setToken: (token) => set({ token }),
+			setUser: (user) => set({ user }),
+
+			logout: () => set({ token: null, user: null }),
+		}),
+		{
+			name: 'auth-storage',
+		},
+	),
+);
+
+
+
+==============================
+FILE: ./src/entities/user/model/user.store.ts
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+type UserState = {
+	xp: number;
+	level: number;
+	completedLessons: number;
+
+	setProgress: (xp: number, completedLessons: number) => void;
+};
+
+export const useUserStore = create<UserState>()(
+	persist(
+		(set) => ({
+			xp: 0,
+			level: 1,
+			completedLessons: 0,
+
+			setProgress: (xp, completedLessons) => {
+				const level = Math.floor(xp / 100) + 1;
+
+				set({
+					xp,
+					level,
+					completedLessons,
+				});
+			},
+		}),
+		{
+			name: 'user-storage',
+		},
+	),
+);
+
+
+
+==============================
+FILE: ./src/features/admin/course/api/useCoursesAdmin.ts
+import type { CoursePreview } from '@/entities/course/model/course.types';
+import { useQuery } from '@tanstack/react-query';
+import { adminCourseApi } from '../../../course/api/course.api';
+
+export const useCoursesAdmin = () => {
+	return useQuery<CoursePreview[]>({
+		queryKey: ['courses'],
+		queryFn: adminCourseApi.getAll,
+	});
+};
+
+
+
+==============================
+FILE: ./src/features/admin/course/api/useCreateCourse.ts
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { adminCourseApi } from '../../../course/api/course.api';
+import type { CourseCreate } from '@/entities/course/model/course.types';
+
+export const useCreateCourse = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (data: CourseCreate) => adminCourseApi.create(data),
+
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ['courses'],
+			});
+		},
+	});
+};
+
+
+
+==============================
+FILE: ./src/features/admin/course/ui/CreateCourseModal.tsx
+import { Modal, Form, Input } from 'antd';
+import { useCreateCourse } from '../api/useCreateCourse';
+import type { CourseCreate } from '@/entities/course/model/course.types';
+
+type Props = {
+	open: boolean;
+	onClose: () => void;
+};
+
+export const CreateCourseModal = ({ open, onClose }: Props) => {
+	const [form] = Form.useForm<CourseCreate>();
+	const createCourse = useCreateCourse();
+
+	const handleSubmit = (values: CourseCreate) => {
+		createCourse.mutate(values, {
+			onSuccess: () => {
+				form.resetFields();
+				onClose();
+			},
+		});
+	};
+
+	return (
+		<Modal
+			title='Создать курс'
+			open={open}
+			onCancel={onClose}
+			onOk={() => form.submit()}
+			confirmLoading={createCourse.isPending}
+		>
+			<Form form={form} layout='vertical' onFinish={handleSubmit}>
+				<Form.Item name='title' label='Название' rules={[{ required: true }]}>
+					<Input />
+				</Form.Item>
+
+				<Form.Item
+					name='description'
+					label='Описание'
+					rules={[{ required: true }]}
+				>
+					<Input.TextArea rows={4} />
+				</Form.Item>
+			</Form>
+		</Modal>
+	);
+};
+
+
+
+==============================
+FILE: ./src/features/admin/lesson/api/lesson.api.ts
+import { api } from '@/shared/api/client';
+import type { LessonCreate } from '@/entities/course/model/course.types';
+
+export const adminLessonApi = {
+	create: async (data: LessonCreate) => {
+		return api.post('/admin/lessons', data);
+	},
+};
+
+
+
+==============================
+FILE: ./src/features/admin/lesson/api/useCreateLesson.ts
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { adminLessonApi } from './lesson.api';
+
+export const useCreateLesson = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: adminLessonApi.create,
+		onSuccess: (_, variables) => {
+			queryClient.invalidateQueries({
+				queryKey: ['module', variables.module_id],
+			});
+		},
+	});
+};
+
+
+
+==============================
+FILE: ./src/features/admin/lesson/ui/CreateLessonModal.tsx
+import { Modal, Form, Input } from 'antd';
+import { useCreateLesson } from '../api/useCreateLesson';
+
+const { TextArea } = Input;
+
+type Props = {
+	open: boolean;
+	onClose: () => void;
+	moduleId: number;
+};
+
+export const CreateLessonModal = ({ open, onClose, moduleId }: Props) => {
+	const [form] = Form.useForm();
+	const createLesson = useCreateLesson();
+
+	const handleSubmit = (values: { title: string; theory_content: string }) => {
+		createLesson.mutate(
+			{
+				module_id: moduleId,
+				title: values.title,
+				theory_content: values.theory_content,
+				order: 1, // временно
+			},
+			{
+				onSuccess: () => {
+					form.resetFields();
+					onClose();
+				},
+			},
+		);
+	};
+
+	return (
+		<Modal
+			title='Создать урок'
+			open={open}
+			onCancel={onClose}
+			onOk={() => form.submit()}
+			confirmLoading={createLesson.isPending}
+		>
+			<Form form={form} layout='vertical' onFinish={handleSubmit}>
+				<Form.Item name='title' label='Название' rules={[{ required: true }]}>
+					<Input />
+				</Form.Item>
+
+				<Form.Item
+					name='theory_content'
+					label='Теория (Markdown)'
+					rules={[{ required: true }]}
+				>
+					<TextArea rows={6} />
+				</Form.Item>
+			</Form>
+		</Modal>
+	);
+};
+
+
+
+==============================
+FILE: ./src/features/admin/module/api/module.api.ts
+import type { ModuleCreate } from '@/entities/course/model/course.types';
+import { api } from '@/shared/api/client';
+
+export const adminModuleApi = {
+	create: async (data: ModuleCreate) => {
+		return api.post('/admin/modules', data);
+	},
+};
+
+
+
+==============================
+FILE: ./src/features/admin/module/api/useCreateModule.ts
+import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { adminModuleApi } from './module.api';
+
+export const useCreateModule = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: adminModuleApi.create,
+
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ['courses'],
+			});
+		},
+	});
+};
+
+
+
+==============================
+FILE: ./src/features/admin/module/ui/CreateModuleModal.tsx
+import { Modal, Form, Input } from 'antd';
+import { useCreateModule } from '../api/useCreateModule';
+
+type Props = {
+	open: boolean;
+	onClose: () => void;
+	courseId: number;
+};
+
+export const CreateModuleModal = ({ open, onClose, courseId }: Props) => {
+	const [form] = Form.useForm();
+	const createModule = useCreateModule();
+
+	const handleSubmit = (values: { title: string }) => {
+		createModule.mutate(
+			{
+				course_id: courseId,
+				title: values.title,
+				order: 1, // пока статично
+			},
+			{
+				onSuccess: () => {
+					form.resetFields();
+					onClose();
+				},
+			},
+		);
+	};
+
+	return (
+		<Modal
+			title='Создать модуль'
+			open={open}
+			onCancel={onClose}
+			onOk={() => form.submit()}
+			confirmLoading={createModule.isPending}
+		>
+			<Form form={form} onFinish={handleSubmit}>
+				<Form.Item name='title' label='Название' rules={[{ required: true }]}>
+					<Input />
+				</Form.Item>
+			</Form>
+		</Modal>
+	);
+};
+
+
+
+==============================
+FILE: ./src/features/auth/api/useLogin.ts
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { authApi } from '@/shared/api/auth.api';
+import { useAuthStore } from '@/entities/user/model/auth.store';
+import type { LoginRequest, User } from '@/shared/types/auth';
+
+type LoginResponse = {
+	access_token: string;
+};
+
+export const useLogin = () => {
+	const setToken = useAuthStore((s) => s.setToken);
+	const setUser = useAuthStore((s) => s.setUser);
+
+	const queryClient = useQueryClient();
+
+	return useMutation<User, Error, LoginRequest>({
+		mutationFn: async (data) => {
+			// 1. логин
+			const loginRes = await authApi.login(data);
+
+			const token = (loginRes as LoginResponse).access_token;
+
+			// 2. сохраняем токен
+			setToken(token);
+
+			// 3. получаем пользователя
+			const user = await authApi.me();
+
+			return user;
+		},
+
+		onSuccess: (user) => {
+			// 4. сохраняем пользователя
+			setUser(user);
+
+			// 5. можно инвалидировать связанные данные
+			queryClient.invalidateQueries({ queryKey: ['courses'] });
+			queryClient.invalidateQueries({ queryKey: ['course'] });
+			queryClient.invalidateQueries({ queryKey: ['progress'] });
+		},
+	});
+};
+
+
+
+==============================
+FILE: ./src/features/auth/api/useMe.ts
+import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { authApi } from '@/shared/api/auth.api';
+import { useAuthStore } from '@/entities/user/model/auth.store';
+import type { User } from '@/shared/types/auth';
+
+export const useMe = () => {
+	const token = useAuthStore((s) => s.token);
+	const setUser = useAuthStore((s) => s.setUser);
+
+	const query = useQuery<User>({
+		queryKey: ['me'],
+		queryFn: authApi.me,
+		enabled: !!token,
+	});
+
+	useEffect(() => {
+		if (query.data) {
+			setUser(query.data);
+		}
+	}, [query.data, setUser]);
+
+	return query;
+};
+
+
+
+==============================
+FILE: ./src/features/auth/api/useRegister.ts
+import { useMutation } from '@tanstack/react-query';
+import { authApi } from '@/shared/api/auth.api';
+import type { RegisterRequest } from '@/shared/types/auth';
+
+export const useRegister = () => {
+	return useMutation({
+		mutationFn: (data: RegisterRequest) => authApi.register(data),
+	});
+};
+
+
+
+==============================
+FILE: ./src/features/course/api/course.api.ts
+import type {
+	CourseCreate,
+	CourseFull,
+	CoursePreview,
+} from '@/entities/course/model/course.types';
+import { api } from '@/shared/api/client';
+
+export const adminCourseApi = {
+	getAll: async (): Promise<CoursePreview[]> => {
+		const res = await api.get('/courses');
+		return res.data;
+	},
+
+	create: async (data: CourseCreate) => {
+		const res = await api.post('/admin/courses', data);
+		return res.data;
+	},
+};
+
+export const courseApi = {
+	getAll: async (): Promise<CoursePreview[]> => {
+		const res = await api.get('/courses');
+		return res.data;
+	},
+
+	getById: async (id: number): Promise<CourseFull> => {
+		const res = await api.get(`/courses/${id}`);
+
+		return {
+			...res.data,
+			modules: res.data.modules ?? [],
+		};
+	},
+};
+
+
+
+==============================
+FILE: ./src/features/course/api/useCourse.ts
+import { useQuery } from '@tanstack/react-query';
+import { courseApi } from './course.api';
+import type { CourseFull } from '@/entities/course/model/course.types';
+
+export const useCourse = (id: number) => {
+	return useQuery<CourseFull>({
+		queryKey: ['course', id],
+		queryFn: () => courseApi.getById(id),
+		enabled: !!id,
+	});
+};
+
+
+
+==============================
+FILE: ./src/features/course/api/useCourses.ts
+import { useQuery } from '@tanstack/react-query';
+import { courseApi } from './course.api';
+import type { CoursePreview } from '@/entities/course/model/course.types';
+
+export const useCourses = () => {
+	return useQuery<CoursePreview[]>({
+		queryKey: ['courses'],
+		queryFn: courseApi.getAll,
+	});
+};
+
+
+
+==============================
+FILE: ./src/features/leaderboard/api/leaderboard.api.ts
+import { api } from '@/shared/api/client';
+import type { LeaderboardUser } from '@/features/progress/api/progress.types';
+
+export const leaderboardApi = {
+	get: async (): Promise<LeaderboardUser[]> => {
+		const res = await api.get('/progress/leaderboard');
+		return res.data;
+	},
+};
+
+
+
+==============================
+FILE: ./src/features/leaderboard/api/useLeaderboard.ts
+import { useQuery } from '@tanstack/react-query';
+import { leaderboardApi } from './leaderboard.api';
+import type { LeaderboardUser } from '@/features/progress/api/progress.types';
+
+export const useLeaderboard = () => {
+	return useQuery<LeaderboardUser[]>({
+		queryKey: ['leaderboard'],
+		queryFn: leaderboardApi.get,
+	});
+};
+
+
+
+==============================
+FILE: ./src/features/progress/api/progress.api.ts
+import { api } from '@/shared/api/client';
+export type LeaderboardUser = {
+	user_id: number;
+	xp: number;
+};
+
+export type ProgressResponse = {
+	xp: number;
+	completed_lessons: number;
+};
+
+export const progressApi = {
+	getMe: async (): Promise<ProgressResponse> => {
+		const res = await api.get('/progress/me');
+		return res.data;
+	},
+
+	getLeaderboard: async (): Promise<LeaderboardUser[]> => {
+		const res = await api.get('/progress/leaderboard');
+		return res.data;
+	},
+};
+
+
+
+==============================
+FILE: ./src/features/progress/api/useProgress.ts
+import { useQuery } from '@tanstack/react-query';
+import { progressApi, type ProgressResponse } from './progress.api';
+import { useUserStore } from '@/entities/user/model/user.store';
+import { useEffect } from 'react';
+
+export const useProgress = () => {
+	const setProgress = useUserStore((s) => s.setProgress);
+
+	const query = useQuery<ProgressResponse>({
+		queryKey: ['progress'],
+		queryFn: progressApi.getMe,
+	});
+
+	useEffect(() => {
+		if (query.data) {
+			setProgress(query.data.xp, query.data.completed_lessons);
+		}
+	}, [query.data, setProgress]);
+
+	return query;
+};
+
+
+
+==============================
+FILE: ./src/features/task/api/task.api.ts
+import type { TaskAttempt } from '@/entities/task/model/taskAttempt.types';
+import { api } from '@/shared/api/client';
+
+export const taskApi = {
+	submit: async (taskId: number, answer: string) => {
+		const res = await api.post<TaskAttempt>(`/tasks/${taskId}/submit`, {
+			answer,
+		});
+
+		return res.data;
+	},
+};
+
+
+
+==============================
+FILE: ./src/features/task/api/useTaskSubmit.ts
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { taskApi } from '../api/task.api';
+import type { TaskAttempt } from '@/entities/task/model/taskAttempt.types';
+
+type SubmitPayload = {
+	taskId: number;
+	lessonId: number; // ✅ добавляем
+	answer: string;
+};
+
+export const useTaskSubmit = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation<TaskAttempt, Error, SubmitPayload>({
+		mutationFn: ({ taskId, answer }) => taskApi.submit(taskId, answer),
+
+		onSuccess: (_, variables) => {
+			queryClient.invalidateQueries({
+				queryKey: ['lesson', variables.lessonId],
+			});
+
+			queryClient.invalidateQueries({
+				queryKey: ['progress'],
+			});
+		},
+	});
+};
+
+
+
+==============================
+FILE: ./src/features/task/ui/CodeTask.tsx
+import { Button, Select, Typography, message } from 'antd';
+import { useState } from 'react';
+import Editor from '@monaco-editor/react';
+import type { CodeTask as CodeTaskType } from '@/entities/task/model/task.types';
+import type { TaskAttempt } from '@/entities/task/model/taskAttempt.types';
+import { useTaskSubmit } from '../api/useTaskSubmit';
+
+const { Text } = Typography;
+
+type Props = {
+	task: CodeTaskType;
+	lessonId: number;
+};
+
+type Language = 'javascript' | 'python' | 'cpp';
+
+export const CodeTaskComponent = ({ task, lessonId }: Props) => {
+	const [code, setCode] = useState<string>('');
+	const [language, setLanguage] = useState<Language>('javascript');
+	const [result, setResult] = useState<TaskAttempt | null>(null);
+
+	const submit = useTaskSubmit();
+
+	const handleSubmit = () => {
+		submit.mutate(
+			{
+				taskId: task.id,
+				lessonId,
+				answer: JSON.stringify({
+					code,
+					language,
+				}),
+			},
+			{
+				onSuccess: (data: TaskAttempt) => {
+					setResult(data);
+				},
+				onError: () => {
+					message.error('Ошибка при отправке кода');
+				},
+			},
+		);
+	};
+
+	return (
+		<div>
+			<p>{task.question}</p>
+
+			<Select<Language>
+				value={language}
+				onChange={(value) => setLanguage(value)}
+				style={{ marginBottom: 8, width: 200 }}
+				options={[
+					{ value: 'javascript', label: 'JavaScript' },
+					{ value: 'python', label: 'Python' },
+					{ value: 'cpp', label: 'C++' },
+				]}
+			/>
+
+			<Editor
+				height='300px'
+				language={language}
+				value={code}
+				onChange={(value: string | undefined) => setCode(value ?? '')}
+				options={{
+					minimap: { enabled: false },
+					fontSize: 14,
+				}}
+			/>
+
+			<div style={{ marginTop: 12 }}>
+				<Button
+					type='primary'
+					onClick={handleSubmit}
+					disabled={!code || submit.isPending}
+					loading={submit.isPending}
+				>
+					Отправить код
+				</Button>
+			</div>
+
+			{result?.status === 'pending' && (
+				<div style={{ marginTop: 8 }}>
+					<Text>Отправлено на проверку</Text>
+				</div>
+			)}
+
+			{result?.status === 'checked' && (
+				<div style={{ marginTop: 8 }}>
+					{result.is_correct ? (
+						<Text type='success'>Правильно</Text>
+					) : (
+						<Text type='danger'>Неправильно</Text>
+					)}
+				</div>
+			)}
+		</div>
+	);
+};
+
+
+
+==============================
+FILE: ./src/features/task/ui/InputTask.tsx
+import { Input, Button, Typography, message } from 'antd';
+import { useState } from 'react';
+import type { InputTask as InputTaskType } from '@/entities/task/model/task.types';
+import type { TaskAttempt } from '@/entities/task/model/taskAttempt.types';
+import { useTaskSubmit } from '../api/useTaskSubmit';
+
+const { Text } = Typography;
+
+type Props = {
+	task: InputTaskType;
+	lessonId: number;
+};
+
+export const InputTaskComponent = ({ task, lessonId }: Props) => {
+	const [value, setValue] = useState<string>('');
+	const [result, setResult] = useState<TaskAttempt | null>(null);
+
+	const submit = useTaskSubmit();
+
+	const handleSubmit = () => {
+		submit.mutate(
+			{
+				taskId: task.id,
+				lessonId,
+				answer: value,
+			},
+			{
+				onSuccess: (data: TaskAttempt) => {
+					setResult(data);
+				},
+				onError: () => {
+					message.error('Ошибка при отправке ответа');
+				},
+			},
+		);
+	};
+
+	return (
+		<div>
+			<p>{task.question}</p>
+
+			<Input
+				value={value}
+				onChange={(e) => setValue(e.target.value)}
+				placeholder='Введите ответ'
+			/>
+
+			<div style={{ marginTop: 12 }}>
+				<Button
+					type='primary'
+					onClick={handleSubmit}
+					disabled={!value || submit.isPending}
+					loading={submit.isPending}
+				>
+					Ответить
+				</Button>
+			</div>
+
+			{result?.status === 'checked' && (
+				<div style={{ marginTop: 8 }}>
+					{result.is_correct ? (
+						<Text type='success'>Правильно</Text>
+					) : (
+						<Text type='danger'>Неправильно</Text>
+					)}
+				</div>
+			)}
+		</div>
+	);
+};
+
+
+
+==============================
+FILE: ./src/features/task/ui/QuizTask.tsx
+import { Radio, Button, Typography } from 'antd';
+import { useState } from 'react';
+import type { QuizTask } from '@/entities/task/model/task.types';
+
+import type { TaskAttempt } from '@/entities/task/model/taskAttempt.types';
+import { useTaskSubmit } from '../api/useTaskSubmit';
+
+const { Text } = Typography;
+
+type Props = {
+	task: QuizTask;
+	lessonId: number;
+};
+
+export const QuizTaskComponent = ({ task, lessonId }: Props) => {
+	const [value, setValue] = useState<string>('');
+	const [result, setResult] = useState<TaskAttempt | null>(null);
+
+	const submit = useTaskSubmit();
+
+	const handleSubmit = () => {
+		submit.mutate(
+			{ taskId: task.id, lessonId, answer: value },
+			{
+				onSuccess: (res) => {
+					setResult(res);
+				},
+			},
+		);
+	};
+
+	return (
+		<div>
+			<p>{task.question}</p>
+
+			<Radio.Group onChange={(e) => setValue(e.target.value)} value={value}>
+				{task.options.map((option) => (
+					<Radio key={option} value={option}>
+						{option}
+					</Radio>
+				))}
+			</Radio.Group>
+
+			<div style={{ marginTop: 12 }}>
+				<Button type='primary' onClick={handleSubmit} disabled={!value}>
+					Проверить
+				</Button>
+			</div>
+
+			{result?.status === 'checked' && (
+				<div style={{ marginTop: 8 }}>
+					{result.is_correct ? (
+						<Text type='success'>Правильно </Text>
+					) : (
+						<Text type='danger'>Неправильно ❌</Text>
+					)}
+				</div>
+			)}
+		</div>
+	);
+};
+
+
+
+==============================
+FILE: ./src/features/task/ui/TaskRenderer.tsx
+import type { Task } from '@/entities/task/model/task.types';
+import { QuizTaskComponent } from './QuizTask';
+import { InputTaskComponent } from './InputTask';
+import { CodeTaskComponent } from './CodeTask';
+
+type Props = {
+	task: Task;
+	lessonId: number;
+};
+
+export const TaskRenderer = ({ task, lessonId }: Props) => {
+	switch (task.type) {
+		case 'quiz':
+			return <QuizTaskComponent task={task} lessonId={lessonId} />;
+
+		case 'input':
+			return <InputTaskComponent task={task} lessonId={lessonId} />;
+
+		case 'code':
+			return <CodeTaskComponent task={task} lessonId={lessonId} />;
+
+		default:
+			return null;
+	}
+};
+
+
+
+==============================
+FILE: ./src/index.css
+
+
+
+==============================
+FILE: ./src/main.tsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
+import { QueryProvider } from '@/app/providers/query-provider';
+import { router } from '@/app/router/router';
+import './index.css';
+import 'antd/dist/reset.css';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+	<React.StrictMode>
+		<QueryProvider>
+			<RouterProvider router={router} />
+		</QueryProvider>
+	</React.StrictMode>,
+);
+
+
+
+
+==============================
+FILE: ./src/pages/admin/courses/ui/AdminCourseDetailPage.tsx
+import { Button, Card, Typography, Spin, Alert } from 'antd';
+import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+
+import { CreateModuleModal } from '@/features/admin/module/ui/CreateModuleModal';
+import { CreateLessonModal } from '@/features/admin/lesson/ui/CreateLessonModal';
+
+import { useModule } from '@/entities/module/api/useModule';
+import { useCourse } from '@/features/course/api/useCourse';
+
+const { Title } = Typography;
+
+export const AdminCourseDetailPage = () => {
+	const { id } = useParams();
+	const courseId = Number(id);
+
+	const [open, setOpen] = useState(false);
+
+	const [selectedModuleId, setSelectedModuleId] = useState<number | null>(null);
+
+	const [lessonModal, setLessonModal] = useState<{
+		open: boolean;
+		moduleId: number | null;
+	}>({
+		open: false,
+		moduleId: null,
+	});
+
+	const {
+		data: course,
+		isLoading: isCourseLoading,
+		isError: isCourseError,
+	} = useCourse(courseId);
+
+	const { data: selectedModule, isLoading: isModuleLoading } = useModule(
+		selectedModuleId ?? 0,
+	);
+
+	if (isCourseLoading) return <Spin />;
+	if (isCourseError || !course)
+		return <Alert type='error' message='Ошибка загрузки курса' />;
+
+	return (
+		<div style={{ padding: 24 }}>
+			<Title level={2}>{course.title}</Title>
+
+			<Button
+				type='primary'
+				onClick={() => setOpen(true)}
+				style={{ marginBottom: 16 }}
+			>
+				Добавить модуль
+			</Button>
+
+			{/* 🔴 СПИСОК МОДУЛЕЙ */}
+			{course.modules?.map((m) => (
+				<Card
+					key={m.id}
+					style={{ marginBottom: 12, cursor: 'pointer' }}
+					onClick={() => setSelectedModuleId(m.id)}
+				>
+					{m.title}
+				</Card>
+			))}
+
+			{/* 🔴 ВЫБРАННЫЙ МОДУЛЬ */}
+			{selectedModuleId && (
+				<Card style={{ marginTop: 24 }}>
+					<Title level={4}>Уроки модуля</Title>
+
+					{isModuleLoading ? (
+						<Spin />
+					) : (
+						<>
+							{(selectedModule?.lessons ?? []).map((l) => (
+								<div key={l.id}>{l.title}</div>
+							))}
+
+							<Button
+								style={{ marginTop: 12 }}
+								onClick={() =>
+									setLessonModal({
+										open: true,
+										moduleId: selectedModuleId,
+									})
+								}
+							>
+								Добавить урок
+							</Button>
+						</>
+					)}
+				</Card>
+			)}
+
+			<CreateModuleModal
+				open={open}
+				onClose={() => setOpen(false)}
+				courseId={courseId}
+			/>
+
+			{lessonModal.moduleId && (
+				<CreateLessonModal
+					open={lessonModal.open}
+					moduleId={lessonModal.moduleId}
+					onClose={() => setLessonModal({ open: false, moduleId: null })}
+				/>
+			)}
+		</div>
+	);
+};
+
+
+
+==============================
+FILE: ./src/pages/admin/courses/ui/AdminCoursesPage.tsx
+import { Table, Button, Typography } from 'antd';
+import { useCoursesAdmin } from '@/features/admin/course/api/useCoursesAdmin';
+import { useNavigate } from 'react-router-dom';
+import { CreateCourseModal } from '@/features/admin/course/ui/CreateCourseModal';
+import { useState } from 'react';
+
+const { Title } = Typography;
+
+export const AdminCoursesPage = () => {
+	const [open, setOpen] = useState(false);
+
+	const { data, isLoading } = useCoursesAdmin();
+	const navigate = useNavigate();
+
+	const columns = [
+		{
+			title: 'ID',
+			dataIndex: 'id',
+		},
+		{
+			title: 'Название',
+			dataIndex: 'title',
+		},
+		{
+			title: 'Описание',
+			dataIndex: 'description',
+		},
+	];
+
+	return (
+		<div style={{ padding: 24 }}>
+			<Title level={2}>Курсы</Title>
+
+			<Button
+				type='primary'
+				onClick={() => setOpen(true)}
+				style={{ marginBottom: 16 }}
+			>
+				Создать курс
+			</Button>
+			<CreateCourseModal open={open} onClose={() => setOpen(false)} />
+
+			<Table
+				rowKey='id'
+				dataSource={data}
+				columns={columns}
+				loading={isLoading}
+				onRow={(record) => ({
+					onClick: () => navigate(`/admin/courses/${record.id}`),
+				})}
+			/>
+		</div>
+	);
+};
+
+
+
+==============================
+FILE: ./src/pages/admin/dashboard/ui/AdminDashboardPage.tsx
+import { Card, Typography } from 'antd';
+import { useNavigate } from 'react-router-dom';
+
+const { Title } = Typography;
+
+export const AdminDashboardPage = () => {
+	const navigate = useNavigate();
+
+	return (
+		<div style={{ padding: 24 }}>
+			<Title level={2}>Admin Panel</Title>
+
+			<div style={{ display: 'flex', gap: 16 }}>
+				<Card hoverable onClick={() => navigate('/admin/courses')}>
+					Курсы
+				</Card>
+
+				<Card hoverable>Уроки</Card>
+
+				<Card hoverable>Задания</Card>
+			</div>
+		</div>
+	);
+};
+
+
+
+==============================
+FILE: ./src/pages/auth/login/ui/LoginPage.tsx
+import { Button, Form, Input, Card, Typography } from 'antd';
+import { useLogin } from '@/features/auth/api/useLogin';
+import { Link, useNavigate } from 'react-router-dom';
+import type { LoginRequest } from '@/shared/types/auth';
+import { useAuthStore } from '@/entities/user/model/auth.store';
+import { useEffect } from 'react';
+
+const { Title } = Typography;
+
+export const LoginPage = () => {
+	const login = useLogin();
+	const navigate = useNavigate();
+
+	const { user } = useAuthStore();
+
+	useEffect(() => {
+		if (!user) return;
+
+		if (user.role === 'admin') navigate('/admin');
+		else if (user.role === 'parent') navigate('/parent');
+		else navigate('/');
+	}, [user, navigate]);
+
+	const onFinish = (values: LoginRequest) => {
+		login.mutate(values);
+	};
+
+	return (
+		<div style={{ display: 'flex', justifyContent: 'center', marginTop: 100 }}>
+			<Card style={{ width: 350 }}>
+				<Title level={3}>Вход</Title>
+
+				<Form layout='vertical' onFinish={onFinish}>
+					<Form.Item
+						name='email'
+						label='Электронная почта'
+						rules={[{ required: true, type: 'email' }]}
+					>
+						<Input />
+					</Form.Item>
+
+					<Form.Item
+						name='password'
+						label='Пароль'
+						rules={[{ required: true, min: 6 }]}
+					>
+						<Input.Password />
+					</Form.Item>
+
+					<Button
+						type='primary'
+						htmlType='submit'
+						loading={login.isPending}
+						block
+					>
+						Войти
+					</Button>
+				</Form>
+
+				<div style={{ marginTop: 12 }}>
+					Нет аккаунта? <Link to='/register'>Зарегистрироваться</Link>
+				</div>
+			</Card>
+		</div>
+	);
+};
+
+
+
+==============================
+FILE: ./src/pages/auth/login/ui/RegisterPage.tsx
+import { Button, Card, Form, Input, Select, Typography } from 'antd';
+import { useRegister } from '@/features/auth/api/useRegister';
+import { Link, useNavigate } from 'react-router-dom';
+import type { RegisterRequest } from '@/shared/types/auth';
+
+const { Title } = Typography;
+
+export const RegisterPage = () => {
+	const [form] = Form.useForm<RegisterRequest>();
+	const register = useRegister();
+	const navigate = useNavigate();
+
+	const handleSubmit = (values: RegisterRequest) => {
+		register.mutate(values, {
+			onSuccess: () => {
+				navigate('/login');
+			},
+		});
+	};
+
+	return (
+		<div style={{ display: 'flex', justifyContent: 'center', marginTop: 100 }}>
+			<Card style={{ width: 350 }}>
+				<Title level={3}>Регистрация</Title>
+
+				<Form form={form} layout='vertical' onFinish={handleSubmit}>
+					<Form.Item
+						name='nickname'
+						label='Никнейм'
+						rules={[{ required: true }]}
+					>
+						<Input />
+					</Form.Item>
+
+					<Form.Item
+						name='email'
+						label='Email'
+						rules={[{ required: true, type: 'email' }]}
+					>
+						<Input />
+					</Form.Item>
+
+					<Form.Item
+						name='password'
+						label='Пароль'
+						rules={[{ required: true, min: 6 }]}
+					>
+						<Input.Password />
+					</Form.Item>
+
+					<Form.Item name='role' label='Роль' rules={[{ required: true }]}>
+						<Select
+							options={[
+								{ value: 'student', label: 'Студент' },
+								{ value: 'parent', label: 'Родитель' },
+							]}
+						/>
+					</Form.Item>
+
+					<Button
+						type='primary'
+						htmlType='submit'
+						loading={register.isPending}
+						block
+					>
+						Зарегистрироваться
+					</Button>
+				</Form>
+
+				<div style={{ marginTop: 12 }}>
+					Уже есть аккаунт? <Link to='/register'>Войти</Link>
+				</div>
+			</Card>
+		</div>
+	);
+};
+
+
+
+==============================
+FILE: ./src/pages/not-found/ui/NotFoundPage.tsx
+import { Result, Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
+
+export const NotFoundPage = () => {
+  const navigate = useNavigate();
+
+  return (
+    <Result
+      status="404"
+      title="404"
+      subTitle="Страница не найдена"
+      extra={
+        <Button type="primary" onClick={() => navigate('/')}>
+          На главную
+        </Button>
+      }
+    />
+  );
+};
+
+
+==============================
+FILE: ./src/pages/student/course/ui/CoursePage.tsx
+import { useParams } from 'react-router-dom';
+import { Card, List, Typography } from 'antd';
+import type { Module } from '@/entities/course/model/course.types';
+
+import { useNavigate } from 'react-router-dom';
+import { useCourse } from '@/features/course/api/useCourse';
+
+const { Title } = Typography;
+
+export const CoursePage = () => {
+	const navigate = useNavigate();
+
+	const { id } = useParams<{ id: string }>();
+
+	const courseId = Number(id);
+
+	const { data: course, isLoading } = useCourse(courseId);
+
+	if (isLoading || !course) return <div>Загрузка...</div>;
+
+	return (
+		<div style={{ padding: 24 }}>
+			<Title level={2}>{course.title}</Title>
+			<p>{course.description}</p>
+
+			{course.modules.map((module: Module) => (
+				<Card key={module.id} title={module.title} style={{ marginBottom: 16 }}>
+					<List
+						dataSource={module.lessons}
+						renderItem={(lesson) => (
+							<List.Item
+								style={{ cursor: 'pointer' }}
+								onClick={() => navigate(`/lessons/${lesson.id}`)}
+							>
+								{lesson.title}
+							</List.Item>
+						)}
+					/>
+				</Card>
+			))}
+		</div>
+	);
+};
+
+
+
+==============================
+FILE: ./src/pages/student/dashboard/ui/DashboardPage.tsx
+import { Card, Typography, Spin, Alert, Row, Col, Empty } from 'antd';
+import { useNavigate } from 'react-router-dom';
+
+import type { CoursePreview } from '@/entities/course/model/course.types';
+import { useCourses } from '@/features/course/api/useCourses';
+import { XPDisplay } from '@/widgets/progress/ui/XPDisplay';
+
+const { Title, Paragraph } = Typography;
+
+export const DashboardPage = () => {
+	const navigate = useNavigate();
+
+	const { data: courses, isLoading, isError } = useCourses();
+
+	if (isLoading) return <Spin style={{ marginTop: 40 }} />;
+
+	if (isError || !courses) {
+		return <Alert type='error' title='Ошибка загрузки курсов' />;
+	}
+
+	return (
+		<div style={{ padding: 24 }}>
+			<XPDisplay />
+
+			<Title level={2}>Курсы</Title>
+
+			{courses.length === 0 && <Empty description='Нет курсов' />}
+			{courses.length !== 0 && (
+				<Row gutter={[16, 16]}>
+					{courses.map((course: CoursePreview) => (
+						<Col xs={24} md={12} lg={8} key={course.id}>
+							<Card hoverable onClick={() => navigate(`/courses/${course.id}`)}>
+								<Title level={4}>{course.title}</Title>
+								<Paragraph ellipsis={{ rows: 2 }}>
+									{course.description}
+								</Paragraph>
+							</Card>
+						</Col>
+					))}
+				</Row>
+			)}
+		</div>
+	);
+};
+
+
+
+==============================
+FILE: ./src/pages/student/lesson/ui/LessonPage.tsx
+import { Typography, Spin, Alert, Divider } from 'antd';
+import { useParams } from 'react-router-dom';
+
+import { useLesson } from '@/entities/lesson/api/useLesson';
+import { TaskRenderer } from '@/features/task/ui/TaskRenderer';
+
+const { Title } = Typography;
+
+export const LessonPage = () => {
+	const { id } = useParams();
+	const lessonId = Number(id);
+
+	const { data: lesson, isLoading, isError } = useLesson(lessonId);
+
+	if (isLoading) return <Spin style={{ marginTop: 40 }} />;
+
+	if (isError || !lesson) {
+		return <Alert type='error' message='Ошибка загрузки урока' />;
+	}
+
+	return (
+		<div style={{ padding: 24 }}>
+			<Title level={2}>{lesson.title}</Title>
+
+			{/* THEORY */}
+			<div
+				style={{ marginBottom: 24 }}
+				dangerouslySetInnerHTML={{
+					__html: lesson.theory_content,
+				}}
+			/>
+
+			<Divider />
+
+			{/* TASKS */}
+			<Title level={4}>Задания</Title>
+
+			{(lesson.tasks ?? []).map((task) => (
+				<div key={task.id} style={{ marginBottom: 16 }}>
+					<TaskRenderer task={task} />
+				</div>
+			))}
+		</div>
+	);
+};
+
+
+
+==============================
+FILE: ./src/shared/api/auth.api.ts
+import type { RegisterRequest, LoginRequest, User } from '@/shared/types/auth';
+import { api } from './client';
+
+export const authApi = {
+	login: async (data: LoginRequest) => {
+		const res = await api.post('/auth/login', data);
+		return res.data;
+	},
+
+	register: async (data: RegisterRequest) => {
+		const res = await api.post('/auth/register', data);
+		return res.data;
+	},
+
+	me: async () => {
+		const res = await api.get<User>('/auth/me');
+		return res.data;
+	},
+};
+
+
+
+==============================
+FILE: ./src/shared/api/client.ts
+import { useAuthStore } from '@/entities/user/model/auth.store';
+import axios from 'axios';
+
+export const api = axios.create({
+	baseURL: import.meta.env.VITE_API_URL,
+	withCredentials: true, // если будут куки
+});
+
+api.interceptors.request.use((config) => {
+	const token = useAuthStore.getState().token;
+
+	if (token) {
+		config.headers.Authorization = `Bearer ${token}`;
+	}
+
+	return config;
+});
+
+api.interceptors.response.use(
+	(response) => response,
+	(error) => {
+		const status = error.response?.status;
+
+		if (status === 401) {
+			const { logout } = useAuthStore.getState();
+			logout();
+
+			window.location.href = '/login';
+		}
+
+		return Promise.reject(error);
+	},
+);
+
+
+
+==============================
+FILE: ./src/shared/types/auth.ts
+export type Role = 'student' | 'admin' | 'parent';
+
+export type User = {
+	id: number;
+	email: string;
+	nickname: string;
+	role: Role;
+};
+
+export type LoginRequest = {
+	email: string;
+	password: string;
+};
+
+export type LoginResponse = {
+	access_token: string;
+	token: string;
+	user: User;
+};
+
+export type RegisterRequest = User & {
+	role: Exclude<Role, 'admin'>;
+};
+
+export type RegisterResponse = {
+	success: boolean;
+};
+
+
+
+==============================
+FILE: ./src/shared/ui/Markdown.tsx
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Typography } from 'antd';
+
+const { Title, Paragraph, Text } = Typography;
+
+type Props = {
+	content: string;
+};
+
+export const Markdown = ({ content }: Props) => {
+	return (
+		<ReactMarkdown
+			remarkPlugins={[remarkGfm]}
+			components={{
+				h1: ({ children }) => <Title level={2}>{children}</Title>,
+				h2: ({ children }) => <Title level={3}>{children}</Title>,
+				h3: ({ children }) => <Title level={4}>{children}</Title>,
+				p: ({ children }) => <Paragraph>{children}</Paragraph>,
+				strong: ({ children }) => <Text strong>{children}</Text>,
+				code: ({ children }) => (
+					<pre style={{ background: '#f5f5f5', padding: 12 }}>
+						<code>{children}</code>
+					</pre>
+				),
+			}}
+		>
+			{content}
+		</ReactMarkdown>
+	);
+};
+
+
+
+==============================
+FILE: ./src/widgets/leaderboard/ui/LeaderBoardTable.tsx
+import { Table, Typography } from 'antd';
+import { useLeaderboard } from '@/features/leaderboard/api/useLeaderboard';
+import type { LeaderboardUser } from '@/features/progress/api/progress.types';
+
+const { Title } = Typography;
+
+export const LeaderboardTable = () => {
+	const { data, isLoading } = useLeaderboard();
+
+	const columns = [
+		{
+			title: 'Место',
+			render: (_: unknown, __: LeaderboardUser, index: number) => index + 1,
+		},
+		{
+			title: 'User ID',
+			dataIndex: 'user_id',
+		},
+		{
+			title: 'XP',
+			dataIndex: 'xp',
+		},
+	];
+
+	return (
+		<div style={{ marginTop: 24 }}>
+			<Title level={3}>Лидерборд</Title>
+
+			<Table
+				rowKey='user_id'
+				loading={isLoading}
+				dataSource={data}
+				columns={columns}
+				pagination={false}
+			/>
+		</div>
+	);
+};
+
+
+
+==============================
+FILE: ./src/widgets/progress/ui/XPDisplay.tsx
+import { Card, Typography, Progress, Badge } from 'antd';
+import { useUserStore } from '@/entities/user/model/user.store';
+
+const { Text } = Typography;
+
+export const XPDisplay = () => {
+	const { xp, level, completedLessons } = useUserStore();
+
+	const xpForNextLevel = 100;
+	const progressPercent = (xp % xpForNextLevel) * 1;
+
+	return (
+		<Card style={{ marginBottom: 16 }}>
+			<Text strong>Уровень: {level}</Text>
+			<br />
+
+			<Badge count={`${xp} XP`} />
+
+			<Progress percent={progressPercent} showInfo={false} status='active' />
+
+			<Text>
+				До следующего уровня: {xpForNextLevel - (xp % xpForNextLevel)}
+			</Text>
+
+			<br />
+			<br />
+
+			<Text>Пройдено уроков: {completedLessons}</Text>
+		</Card>
+	);
+};
+
+
+
+==============================
+FILE: ./tsconfig.app.json
+{
+	"compilerOptions": {
+		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+		"target": "ES2023",
+		"useDefineForClassFields": true,
+		"lib": ["ES2023", "DOM", "DOM.Iterable"],
+		"module": "ESNext",
+		"types": ["vite/client"],
+		"skipLibCheck": true,
+
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["src/*"]
+		},
+
+		/* Bundler mode */
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"moduleDetection": "force",
+		"noEmit": true,
+		"jsx": "react-jsx",
+
+		/* Linting */
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"erasableSyntaxOnly": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedSideEffectImports": true
+	},
+	"include": ["src"]
+}
+
+
+
+
+==============================
+FILE: ./tsconfig.json
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
+
+
+
+==============================
+FILE: ./tsconfig.node.json
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "types": ["node"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["vite.config.ts"]
+}
+
+
+
+==============================
+FILE: ./vite.config.ts
+import { defineConfig } from 'vite';
+import react, { reactCompilerPreset } from '@vitejs/plugin-react';
+import babel from '@rolldown/plugin-babel';
+import path from 'path';
+
+// https://vite.dev/config/
+export default defineConfig({
+	plugins: [react(), babel({ presets: [reactCompilerPreset()] })],
+	resolve: {
+		alias: {
+			'@': path.resolve(__dirname, './src'),
+		},
+	},
+});

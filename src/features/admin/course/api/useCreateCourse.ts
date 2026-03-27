@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { adminCourseApi } from './course.api';
+import { adminCourseApi } from '../../../course/api/course.api';
 import type { CourseCreate } from '@/entities/course/model/course.types';
 
 export const useCreateCourse = () => {
@@ -10,7 +10,7 @@ export const useCreateCourse = () => {
 
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: ['admin-courses'],
+				queryKey: ['courses'],
 			});
 		},
 	});

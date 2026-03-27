@@ -1,22 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
-import type { RegisterRequest, RegisterResponse } from '@/shared/types/auth';
-// import { authApi } from '@/shared/api/auth.api'; //  REAL
+import { authApi } from '@/shared/api/auth.api';
+import type { RegisterRequest } from '@/shared/types/auth';
 
 export const useRegister = () => {
-	return useMutation<RegisterResponse, Error, RegisterRequest>({
-		//  MOCK
-		mutationFn: async () => {
-			await new Promise((res) => setTimeout(res, 500));
-
-			return { success: true };
-		},
-
-		/*
-    //  REAL
-    mutationFn: async (data) => {
-      const res = await authApi.register(data);
-      return res.data;
-    },
-    */
+	return useMutation({
+		mutationFn: (data: RegisterRequest) => authApi.register(data),
 	});
 };

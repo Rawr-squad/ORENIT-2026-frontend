@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { adminModuleApi } from './module.api';
 
 export const useCreateModule = () => {
@@ -9,7 +9,7 @@ export const useCreateModule = () => {
 
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: ['course'],
+				queryKey: ['courses'],
 			});
 		},
 	});

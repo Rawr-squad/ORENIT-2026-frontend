@@ -1,19 +1,29 @@
 import { create } from 'zustand';
-
-type Role = 'student' | 'admin' | 'parent';
+import { persist } from 'zustand/middleware';
+import type { User } from '@/shared/types/auth';
 
 type AuthState = {
 	token: string | null;
-	role: Role | null;
+	user: User | null;
 
-	setAuth: (token: string, role: Role) => void;
+	setToken: (token: string) => void;
+	setUser: (user: User) => void;
 	logout: () => void;
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
-	token: null,
-	role: null,
+export const useAuthStore = create<AuthState>()(
+	persist(
+		(set) => ({
+			token: null,
+			user: null,
 
-	setAuth: (token, role) => set({ token, role }),
-	logout: () => set({ token: null, role: null }),
-}));
+			setToken: (token) => set({ token }),
+			setUser: (user) => set({ user }),
+
+			logout: () => set({ token: null, user: null }),
+		}),
+		{
+			name: 'auth-storage',
+		},
+	),
+);

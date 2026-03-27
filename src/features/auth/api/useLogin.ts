@@ -1,37 +1,42 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { authApi } from '@/shared/api/auth.api';
 import { useAuthStore } from '@/entities/user/model/auth.store';
-import type { LoginRequest, LoginResponse, Role } from '@/shared/types/auth';
-// import { authApi } from '@/shared/api/auth.api'; //  REAL
+import type { LoginRequest, User } from '@/shared/types/auth';
+
+type LoginResponse = {
+	access_token: string;
+};
 
 export const useLogin = () => {
-	const setAuth = useAuthStore((s) => s.setAuth);
+	const setToken = useAuthStore((s) => s.setToken);
+	const setUser = useAuthStore((s) => s.setUser);
 
-	return useMutation<LoginResponse, Error, LoginRequest>({
-		//  MOCK
+	const queryClient = useQueryClient();
+
+	return useMutation<User, Error, LoginRequest>({
 		mutationFn: async (data) => {
-			await new Promise((res) => setTimeout(res, 500));
+			// 1. логин
+			const loginRes = await authApi.login(data);
 
-			let role: Role = 'student';
+			const token = (loginRes as LoginResponse).access_token;
 
-			if (data.email.includes('admin')) role = 'admin';
-			if (data.email.includes('parent')) role = 'parent';
+			// 2. сохраняем токен
+			setToken(token);
 
-			return {
-				token: 'mock-token',
-				role,
-			};
+			// 3. получаем пользователя
+			const user = await authApi.me();
+
+			return user;
 		},
 
-		/*
-    //  REAL
-    mutationFn: async (data) => {
-      const res = await authApi.login(data);
-      return res.data;
-    },
-    */
+		onSuccess: (user) => {
+			// 4. сохраняем пользователя
+			setUser(user);
 
-		onSuccess: (data) => {
-			setAuth(data.token, data.role);
+			// 5. можно инвалидировать связанные данные
+			queryClient.invalidateQueries({ queryKey: ['courses'] });
+			queryClient.invalidateQueries({ queryKey: ['course'] });
+			queryClient.invalidateQueries({ queryKey: ['progress'] });
 		},
 	});
 };
