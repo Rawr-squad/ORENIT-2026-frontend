@@ -1,23 +1,56 @@
-import { Card, Typography } from 'antd';
+﻿import { Card, Col, Row, Spin, Tag, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { PageHeader } from '@/shared/ui/layout/PageHeader';
+import { palette } from '@/shared/config/theme';
+import { usePendingCodeAttempts } from '@/features/admin/review/api/usePendingCodeAttempts';
 
-const { Title } = Typography;
+const { Text } = Typography;
 
 export const AdminDashboardPage = () => {
 	const navigate = useNavigate();
+	const pending = usePendingCodeAttempts();
 
 	return (
-		<div style={{ padding: 24 }}>
-			<Title level={2}>Admin Panel</Title>
+		<div>
+			<PageHeader
+				title='Дашборд администратора'
+				subtitle='Управление курсами и проверка решений по коду'
+				rightSlot={
+					pending.isLoading ? <Spin size='small' /> : <Tag color='processing'>{pending.data?.length ?? 0} на проверке</Tag>
+				}
+			/>
 
-			<div style={{ display: 'flex', gap: 16 }}>
-				<Card hoverable onClick={() => navigate('/admin/courses')}>
-					Курсы
-				</Card>
-
-				<Card hoverable>Уроки</Card>
-
-				<Card hoverable>Задания</Card>
+			<div style={{ padding: 24 }}>
+				<Row gutter={[16, 16]}>
+					<Col xs={24} md={12}>
+						<Card
+							hoverable
+							style={{ borderColor: palette.pink }}
+							onClick={() => navigate('/admin/courses')}
+						>
+							<Text strong style={{ fontSize: 18, color: palette.navy }}>
+								Управление курсами
+							</Text>
+							<div style={{ color: palette.textSecondary, marginTop: 8 }}>
+								Создание и редактирование курсов, модулей, уроков и заданий
+							</div>
+						</Card>
+					</Col>
+					<Col xs={24} md={12}>
+						<Card
+							hoverable
+							style={{ borderColor: palette.pink }}
+							onClick={() => navigate('/admin/profile')}
+						>
+							<Text strong style={{ fontSize: 18, color: palette.navy }}>
+								Проверка кода
+							</Text>
+							<div style={{ color: palette.textSecondary, marginTop: 8 }}>
+								Проверяйте кодовые решения и отмечайте верно/неверно
+							</div>
+						</Card>
+					</Col>
+				</Row>
 			</div>
 		</div>
 	);

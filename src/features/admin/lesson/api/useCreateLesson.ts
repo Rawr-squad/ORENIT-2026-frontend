@@ -7,9 +7,9 @@ export const useCreateLesson = () => {
 	return useMutation({
 		mutationFn: adminLessonApi.create,
 		onSuccess: (_, variables) => {
-			queryClient.invalidateQueries({
-				queryKey: ['module', variables.module_id],
-			});
+			queryClient.invalidateQueries({ queryKey: ['module', variables.module_id] });
+			queryClient.invalidateQueries({ queryKey: ['course'] });
+			queryClient.invalidateQueries({ queryKey: ['courses'] });
 		},
 	});
 };

@@ -1,22 +1,23 @@
-export type Lesson = {
+﻿export type Lesson = {
 	id: number;
 	title: string;
+	order?: number;
 };
 
 export type Module = {
 	id: number;
 	title: string;
+	order?: number;
 	lessons: Lesson[];
 };
 
-// для списка (GET /courses)
 export type CoursePreview = {
 	id: number;
 	title: string;
 	description: string;
+	modules_count?: number;
 };
 
-// для страницы курса (детально)
 export type CourseFull = {
 	id: number;
 	title: string;
@@ -41,3 +42,4 @@ export type LessonCreate = {
 	theory_content: string;
 	order: number;
 };
+

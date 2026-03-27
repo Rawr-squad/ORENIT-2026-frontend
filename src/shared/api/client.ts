@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const api = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
-	withCredentials: true, // если будут куки
+	withCredentials: false,
 });
 
 api.interceptors.request.use((config) => {
@@ -24,8 +24,6 @@ api.interceptors.response.use(
 		if (status === 401) {
 			const { logout } = useAuthStore.getState();
 			logout();
-
-			window.location.href = '/login';
 		}
 
 		return Promise.reject(error);

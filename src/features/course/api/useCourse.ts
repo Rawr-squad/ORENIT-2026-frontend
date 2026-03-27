@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+﻿import { useQuery } from '@tanstack/react-query';
 import { courseApi } from './course.api';
 import type { CourseFull } from '@/entities/course/model/course.types';
 
@@ -9,3 +9,4 @@ export const useCourse = (id: number) => {
 		enabled: !!id,
 	});
 };
+

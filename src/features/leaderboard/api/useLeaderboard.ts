@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+﻿import { useQuery } from '@tanstack/react-query';
 import { leaderboardApi } from './leaderboard.api';
 import type { LeaderboardUser } from '@/features/progress/api/progress.types';
 
@@ -8,3 +8,4 @@ export const useLeaderboard = () => {
 		queryFn: leaderboardApi.get,
 	});
 };
+
