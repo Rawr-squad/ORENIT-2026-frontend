@@ -14,8 +14,6 @@ lerna-debug.log*
 !.yarn/sdks
 !.yarn/versions
 .vscode
-.env
-.env.*
 coverage
 
 node_modules
