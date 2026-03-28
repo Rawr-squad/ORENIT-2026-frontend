@@ -251,7 +251,9 @@ export const DashboardPage = () => {
 
 				{/* CHAT */}
 				<Col xs={24} lg={8}>
-					<ChatWidget />
+					<div style={{ height: 400 }}>
+						<ChatWidget />
+					</div>
 				</Col>
 			</Row>
 		</div>

@@ -1,9 +1,8 @@
-import { useAuthStore } from '@/entities/user/model/auth.store';
 import axios from 'axios';
+import { useAuthStore } from '@/entities/user/model/auth.store';
 
 export const api = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
-	withCredentials: false,
 });
 
 api.interceptors.request.use((config) => {
@@ -17,15 +16,20 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-	(response) => response,
+	(res) => res,
 	(error) => {
-		const status = error.response?.status;
+		const status = error?.response?.status;
 
 		if (status === 401) {
 			const { logout } = useAuthStore.getState();
+
 			logout();
+
+			// ❗ важно: полный редирект, не navigate
+			window.location.href = '/login';
 		}
 
 		return Promise.reject(error);
 	},
 );
+

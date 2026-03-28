@@ -1,23 +1,25 @@
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-
 import { progressApi } from './progress.api';
-import { useUserStore } from '@/entities/user/model/user.store';
-import type { ProgressResponse } from './progress.types';
+import { useAuthStore } from '@/entities/user/model/auth.store';
 
 export const useProgress = () => {
-	const setProgress = useUserStore((s) => s.setProgress);
+	const setUser = useAuthStore((s) => s.setUser);
+	const user = useAuthStore((s) => s.user);
 
-	const query = useQuery<ProgressResponse>({
+	const query = useQuery({
 		queryKey: ['progress'],
 		queryFn: progressApi.getMe,
 	});
 
 	useEffect(() => {
-		if (query.data) {
-			setProgress(query.data);
+		if (query.data && user) {
+			setUser({
+				...user,
+				coins: query.data.coins,
+			});
 		}
-	}, [query.data, setProgress]);
+	}, [query.data]);
 
 	return query;
 };

@@ -23,7 +23,7 @@ export const StudentShopPage = () => {
 		);
 	}
 
-	const coins = user?.coins ?? progress.data?.coins ?? 0;
+	const coins = progress.data?.coins ?? 0;
 
 	return (
 		<div>

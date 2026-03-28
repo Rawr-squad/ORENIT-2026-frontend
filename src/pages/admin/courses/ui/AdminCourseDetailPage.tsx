@@ -504,55 +504,59 @@ export const AdminCourseDetailPage = () => {
 								selectedModule?.lessons.length === 0 && (
 									<Empty description='Пока нет уроков' />
 								)}
-							<List
-								dataSource={selectedModule?.lessons ?? []}
-								renderItem={(lesson) => (
-									<List.Item
-										style={{
-											cursor: 'pointer',
-											background:
-												selectedLessonId === lesson.id
-													? '#f9f3ff'
-													: 'transparent',
-											borderRadius: 10,
-											paddingInline: 10,
-										}}
-										onClick={() => setSelectedLessonId(lesson.id)}
-										actions={[
-											<Tooltip key='edit' title='Редактировать урок'>
-												<Button
-													type='text'
-													icon={<EditOutlined />}
-													onClick={(event) => {
-														event.stopPropagation();
-														openEditLesson(
-															lesson.id,
-															lesson.title,
-															lesson.order,
-														);
-													}}
-												/>
-											</Tooltip>,
-											<Popconfirm
-												key='delete'
-												title='Удалить урок?'
-												onConfirm={() => deleteLesson.mutate(lesson.id)}
-											>
-												<Tooltip title='Удалить урок'>
+							{selectedModule?.lessons.length && (
+								<List
+									dataSource={selectedModule?.lessons ?? []}
+									renderItem={(lesson) => (
+										<List.Item
+											style={{
+												cursor: 'pointer',
+												background:
+													selectedLessonId === lesson.id
+														? '#f9f3ff'
+														: 'transparent',
+												borderRadius: 10,
+												paddingInline: 10,
+											}}
+											onClick={() => setSelectedLessonId(lesson.id)}
+											actions={[
+												<Tooltip key='edit' title='Редактировать урок'>
 													<Button
 														type='text'
-														danger
-														icon={<DeleteOutlined />}
-														onClick={(event) => event.stopPropagation()}
+														icon={<EditOutlined />}
+														onClick={(event) => {
+															event.stopPropagation();
+															openEditLesson(
+																lesson.id,
+																lesson.title,
+																lesson.order,
+															);
+														}}
 													/>
-												</Tooltip>
-											</Popconfirm>,
-										]}
-									>
-										<Text style={{ color: palette.navy }}>{lesson.title}</Text>
-									</List.Item>
-								)}
-							/>
+												</Tooltip>,
+												<Popconfirm
+													key='delete'
+													title='Удалить урок?'
+													onConfirm={() => deleteLesson.mutate(lesson.id)}
+												>
+													<Tooltip title='Удалить урок'>
+														<Button
+															type='text'
+															danger
+															icon={<DeleteOutlined />}
+															onClick={(event) => event.stopPropagation()}
+														/>
+													</Tooltip>
+												</Popconfirm>,
+											]}
+										>
+											<Text style={{ color: palette.navy }}>
+												{lesson.title}
+											</Text>
+										</List.Item>
+									)}
+								/>
+							)}
 						</BaseCard>
 					</Col>
 

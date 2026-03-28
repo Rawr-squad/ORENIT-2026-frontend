@@ -36,3 +36,4 @@ export type TaskCreate = {
 	correct_answer: string | null;
 	coins: number;
 };
+

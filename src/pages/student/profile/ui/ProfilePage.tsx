@@ -31,7 +31,7 @@ export const ProfilePage = () => {
 		);
 	}
 
-	const coins = user?.coins ?? progress.data.coins ?? 0;
+	const coins = progress.data.coins ?? 0;
 	const roleLabelByRole = {
 		student: 'Ученик',
 		parent: 'Родитель',

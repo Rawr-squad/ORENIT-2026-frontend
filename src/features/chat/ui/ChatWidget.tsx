@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/entities/user/model/auth.store';
 import { palette } from '@/shared/config/theme';
-import { Input, Button, Empty } from 'antd';
+import { Input, Button } from 'antd';
 import { useEffect, useState, useRef } from 'react';
 import { connectChat, subscribeChat, sendMessage } from '../api/chat.socket';
 
@@ -10,15 +10,6 @@ type Message = {
 	user_id: number;
 	nickname?: string;
 	nickname_color?: string | null;
-	status?: string;
-	timestamp?: string;
-};
-
-const formatTime = (ts?: string) => {
-	if (!ts) return '';
-
-	const date = new Date(ts);
-	return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };
 
 export const ChatWidget = () => {
@@ -28,9 +19,17 @@ export const ChatWidget = () => {
 	const [input, setInput] = useState('');
 
 	const bottomRef = useRef<HTMLDivElement | null>(null);
+	const connectedRef = useRef(false);
 
 	useEffect(() => {
+		if (connectedRef.current) return;
+		connectedRef.current = true;
+
+		connectChat();
+
 		const unsubscribe = subscribeChat((raw: any) => {
+			if (raw.type !== 'message') return;
+
 			let parsedText = raw.text;
 
 			try {
@@ -41,18 +40,14 @@ export const ChatWidget = () => {
 			setMessages((prev) => [
 				...prev,
 				{
-					id: `${raw.timestamp}-${raw.user_id}`,
+					id: raw.timestamp,
 					text: parsedText,
 					user_id: raw.user_id,
 					nickname: raw.nickname,
 					nickname_color: raw.nickname_color,
-					status: raw.status,
-					timestamp: raw.timestamp,
 				},
 			]);
 		});
-
-		connectChat();
 
 		return unsubscribe;
 	}, []);
@@ -71,40 +66,26 @@ export const ChatWidget = () => {
 	return (
 		<div
 			style={{
-				height: 420,
 				display: 'flex',
 				flexDirection: 'column',
+				height: '100%',
+				minHeight: 0,
 				border: `1px solid ${palette.borderSoft}`,
 				borderRadius: 16,
 				background: '#fff',
-				boxShadow: '0 4px 16px rgba(0,0,0,0.05)',
+				overflow: 'hidden',
 			}}
 		>
-			{/* HEADER */}
-			<div
-				style={{
-					padding: '10px 14px',
-					borderBottom: `1px solid ${palette.borderSoft}`,
-					fontWeight: 600,
-					color: palette.navy,
-				}}
-			>
-				Общий чат
-			</div>
-
-			{/* MESSAGES */}
+			{/* сообщения */}
 			<div
 				style={{
 					flex: 1,
+					minHeight: 0,
 					padding: 12,
 					overflowY: 'auto',
-					display: 'flex',
-					flexDirection: 'column',
-					gap: 8,
+					overflowX: 'hidden', // 💥 убрали горизонтальный скролл
 				}}
 			>
-				{messages.length === 0 && <Empty description='Пока нет сообщений' />}
-
 				{messages.map((msg) => {
 					const isMine = msg.user_id === user?.id;
 
@@ -113,48 +94,28 @@ export const ChatWidget = () => {
 							key={msg.id}
 							style={{
 								display: 'flex',
-								flexDirection: 'column',
-								alignItems: isMine ? 'flex-end' : 'flex-start',
+								justifyContent: isMine ? 'flex-end' : 'flex-start',
+								marginBottom: 8,
 							}}
 						>
 							<div
 								style={{
-									fontSize: 12,
-									color: msg.nickname_color || '#888',
-									marginBottom: 2,
-								}}
-							>
-								{msg.nickname}
-								{msg.status && (
-									<span style={{ marginLeft: 6, opacity: 0.6 }}>
-										• {msg.status}
-									</span>
-								)}
-							</div>
-
-							<div
-								style={{
-									padding: '10px 14px',
-									borderRadius: 14,
-									background: isMine
-										? 'linear-gradient(135deg, #D2F8D2, #B8F1B8)'
-										: '#F5F7FB',
+									padding: '8px 12px',
+									borderRadius: 12,
+									background: isMine ? '#D2F8D2' : '#F5F5F5',
 									maxWidth: '70%',
-									boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+									wordBreak: 'break-word', // 💥 фикс длинных строк
 								}}
 							>
-								<div style={{ color: palette.navy }}>{msg.text}</div>
-
 								<div
 									style={{
-										fontSize: 11,
-										marginTop: 4,
-										opacity: 0.6,
-										textAlign: 'right',
+										fontSize: 12,
+										color: msg.nickname_color || '#999',
 									}}
 								>
-									{formatTime(msg.timestamp)}
+									{msg.nickname}
 								</div>
+								<div>{msg.text}</div>
 							</div>
 						</div>
 					);
@@ -163,32 +124,21 @@ export const ChatWidget = () => {
 				<div ref={bottomRef} />
 			</div>
 
-			{/* INPUT */}
+			{/* input */}
 			<div
 				style={{
 					display: 'flex',
 					gap: 8,
-					padding: 10,
+					padding: 8,
 					borderTop: `1px solid ${palette.borderSoft}`,
 				}}
 			>
 				<Input
-					placeholder='Написать сообщение...'
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
 					onPressEnter={handleSend}
-					style={{
-						borderRadius: 10,
-					}}
 				/>
-				<Button
-					type='primary'
-					onClick={handleSend}
-					style={{
-						borderRadius: 10,
-						fontWeight: 600,
-					}}
-				>
+				<Button type='primary' onClick={handleSend}>
 					Отправить
 				</Button>
 			</div>
