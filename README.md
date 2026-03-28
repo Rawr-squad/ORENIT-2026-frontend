@@ -19,10 +19,21 @@ Frontend часть образовательной платформы.
 docker-compose up --build
 ```
 
-или
+### 2. Открыть в браузере
 
-```bash
+`http://localhost:5173`
+
+### ⚙️ Переменные окружения
+
+VITE_API_URL - URL backend API
+VITE_WS_URL - WebSocket сервер
+
+Пример:
+
+VITE_API_URL=http://localhost:8000
+VITE_WS_URL=ws://localhost:8000
+
+### 🧪 Локальный запуск (без Docker)
+
 npm install
 npm run dev
-```
-
