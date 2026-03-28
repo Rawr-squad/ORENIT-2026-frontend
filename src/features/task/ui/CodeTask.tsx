@@ -1,10 +1,11 @@
 import { lazy, Suspense, useMemo, useState } from 'react';
-import { Alert, App, Button, Card, Select, Spin, Tag } from 'antd';
+import { Alert, App, Button, Select, Spin, Tag } from 'antd';
 import type { CodeTask as CodeTaskType } from '@/entities/task/model/task.types';
 import type { TaskAttempt } from '@/entities/task/model/taskAttempt.types';
 import { useTaskSubmit } from '../api/useTaskSubmit';
 import { palette } from '@/shared/config/theme';
 import { Markdown } from '@/shared/ui/Markdown';
+import { BaseCard } from '@/shared/ui/card/BaseCard';
 
 const MonacoEditor = lazy(() => import('@monaco-editor/react'));
 
@@ -68,7 +69,9 @@ export const CodeTaskComponent = ({ task, lessonId }: Props) => {
 
 	const handleSubmit = () => {
 		if (!canSubmit) {
-			message.info('Сейчас отправка недоступна. Дождитесь результата проверки.');
+			message.info(
+				'Сейчас отправка недоступна. Дождитесь результата проверки.',
+			);
 			return;
 		}
 
@@ -85,11 +88,13 @@ export const CodeTaskComponent = ({ task, lessonId }: Props) => {
 	};
 
 	return (
-		<Card style={{ borderColor: palette.pink }}>
+		<BaseCard>
 			<Markdown content={task.question} />
 
 			<div style={{ marginTop: 10 }}>
-				{result?.status === 'pending' && <Tag color='processing'>На проверке</Tag>}
+				{result?.status === 'pending' && (
+					<Tag color='processing'>На проверке</Tag>
+				)}
 				{result?.status === 'checked' && result.is_correct === true && (
 					<Tag color='success'>Проверено: верно</Tag>
 				)}
@@ -110,7 +115,9 @@ export const CodeTaskComponent = ({ task, lessonId }: Props) => {
 			/>
 
 			<div style={{ marginTop: 12, borderRadius: 12, overflow: 'hidden' }}>
-				<Suspense fallback={<Spin style={{ display: 'block', margin: '48px auto' }} />}>
+				<Suspense
+					fallback={<Spin style={{ display: 'block', margin: '48px auto' }} />}
+				>
 					<MonacoEditor
 						height='300px'
 						language={language}
@@ -144,7 +151,11 @@ export const CodeTaskComponent = ({ task, lessonId }: Props) => {
 			)}
 
 			{result?.status === 'checked' && result.is_correct === true && (
-				<Alert style={{ marginTop: 12 }} type='success' message='Решение принято.' />
+				<Alert
+					style={{ marginTop: 12 }}
+					type='success'
+					message='Решение принято.'
+				/>
 			)}
 
 			{result?.status === 'checked' && result.is_correct === false && (
@@ -156,8 +167,13 @@ export const CodeTaskComponent = ({ task, lessonId }: Props) => {
 			)}
 
 			{result?.feedback && (
-				<Alert style={{ marginTop: 12 }} type='info' message={result.feedback} />
+				<Alert
+					style={{ marginTop: 12 }}
+					type='info'
+					message={result.feedback}
+				/>
 			)}
-		</Card>
+		</BaseCard>
 	);
 };
+

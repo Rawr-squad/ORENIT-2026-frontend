@@ -1,0 +1,1608 @@
+{
+	"openapi": "3.1.0",
+	"info": { "title": "Edu Platform", "version": "0.1.0" },
+	"paths": {
+		"/auth/register": {
+			"post": {
+				"summary": "Register",
+				"operationId": "register_auth_register_post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/RegisterRequest" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/login": {
+			"post": {
+				"summary": "Login",
+				"operationId": "login_auth_login_post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/LoginRequest" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/me": {
+			"get": {
+				"summary": "About User",
+				"operationId": "about_user_auth_me_get",
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/courses": {
+			"get": {
+				"summary": "Get Courses",
+				"operationId": "get_courses_courses_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					}
+				}
+			}
+		},
+		"/courses/{id}": {
+			"get": {
+				"summary": "Get Course",
+				"operationId": "get_course_courses__id__get",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Id" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/lessons/{id}": {
+			"get": {
+				"summary": "Get Lesson",
+				"operationId": "get_lesson_lessons__id__get",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Id" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/tasks/{task_id}/submit": {
+			"post": {
+				"summary": "Submit",
+				"operationId": "submit_tasks__task_id__submit_post",
+				"parameters": [
+					{
+						"name": "task_id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Task Id" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/TaskSubmit" }
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/parent-link": {
+			"post": {
+				"summary": "Link",
+				"operationId": "link_parent_link_post",
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/ParentLinkRequest" }
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/progress/start": {
+			"post": {
+				"summary": "Start Lesson",
+				"operationId": "start_lesson_progress_start_post",
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/StartLessonRequest" }
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/progress/me": {
+			"get": {
+				"summary": "My Progress",
+				"operationId": "my_progress_progress_me_get",
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/progress/leaderboard": {
+			"get": {
+				"summary": "Leaderboard",
+				"operationId": "leaderboard_progress_leaderboard_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					}
+				}
+			}
+		},
+		"/admin/courses": {
+			"post": {
+				"tags": ["admin"],
+				"summary": "Create Course",
+				"operationId": "create_course_admin_courses_post",
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/CourseCreate" }
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/courses/{id}": {
+			"put": {
+				"tags": ["admin"],
+				"summary": "Update Course",
+				"operationId": "update_course_admin_courses__id__put",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Id" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/CourseCreate" }
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["admin"],
+				"summary": "Delete Course",
+				"operationId": "delete_course_admin_courses__id__delete",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Id" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/modules": {
+			"post": {
+				"summary": "Create Module",
+				"operationId": "create_module_admin_modules_post",
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/ModuleCreate" }
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/modules/{id}": {
+			"put": {
+				"summary": "Update Module",
+				"operationId": "update_module_admin_modules__id__put",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Id" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/ModuleCreate" }
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Delete Module",
+				"operationId": "delete_module_admin_modules__id__delete",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Id" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/lessons": {
+			"post": {
+				"summary": "Create Lesson",
+				"operationId": "create_lesson_admin_lessons_post",
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/LessonCreate" }
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/lessons/{id}": {
+			"put": {
+				"summary": "Update Lesson",
+				"operationId": "update_lesson_admin_lessons__id__put",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Id" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/LessonCreate" }
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Delete Lesson",
+				"operationId": "delete_lesson_admin_lessons__id__delete",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Id" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/tasks": {
+			"post": {
+				"summary": "Create Task",
+				"operationId": "create_task_admin_tasks_post",
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/TaskCreate" }
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/tasks/{id}": {
+			"put": {
+				"summary": "Update Task",
+				"operationId": "update_task_admin_tasks__id__put",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Id" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/TaskCreate" }
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Delete Task",
+				"operationId": "delete_task_admin_tasks__id__delete",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Id" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/attempts/pending": {
+			"get": {
+				"summary": "Get Pending",
+				"operationId": "get_pending_admin_attempts_pending_get",
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/attempts/{id}/review": {
+			"post": {
+				"summary": "Review",
+				"operationId": "review_admin_attempts__id__review_post",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Id" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/ReviewAttemptRequest" }
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/achievements": {
+			"post": {
+				"summary": "Create Achievement",
+				"operationId": "create_achievement_admin_achievements_post",
+				"parameters": [
+					{
+						"name": "title",
+						"in": "query",
+						"required": true,
+						"schema": { "type": "string", "title": "Title" }
+					},
+					{
+						"name": "description",
+						"in": "query",
+						"required": true,
+						"schema": { "type": "string", "title": "Description" }
+					},
+					{
+						"name": "type",
+						"in": "query",
+						"required": true,
+						"schema": { "type": "string", "title": "Type" }
+					},
+					{
+						"name": "condition_value",
+						"in": "query",
+						"required": true,
+						"schema": { "type": "integer", "title": "Condition Value" }
+					},
+					{
+						"name": "reward_coins",
+						"in": "query",
+						"required": true,
+						"schema": { "type": "integer", "title": "Reward Coins" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/achievements": {
+			"get": {
+				"tags": ["achievements"],
+				"summary": "Get All",
+				"operationId": "get_all_achievements_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					}
+				}
+			}
+		},
+		"/achievements/me": {
+			"get": {
+				"tags": ["achievements"],
+				"summary": "My Achievements",
+				"operationId": "my_achievements_achievements_me_get",
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/achievements/{id}": {
+			"get": {
+				"tags": ["achievements"],
+				"summary": "Get One",
+				"operationId": "get_one_achievements__id__get",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Id" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/achievements/seed": {
+			"post": {
+				"tags": ["achievements"],
+				"summary": "Create Achievements",
+				"operationId": "create_achievements_achievements_seed_post",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					}
+				}
+			}
+		},
+		"/admin/shop/colors": {
+			"post": {
+				"summary": "Create Color",
+				"operationId": "create_color_admin_shop_colors_post",
+				"parameters": [
+					{
+						"name": "name",
+						"in": "query",
+						"required": true,
+						"schema": { "type": "string", "title": "Name" }
+					},
+					{
+						"name": "hex_code",
+						"in": "query",
+						"required": true,
+						"schema": { "type": "string", "title": "Hex Code" }
+					},
+					{
+						"name": "price",
+						"in": "query",
+						"required": true,
+						"schema": { "type": "integer", "title": "Price" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/shop/admin/statuses": {
+			"post": {
+				"summary": "Create Status",
+				"operationId": "create_status_admin_shop_admin_statuses_post",
+				"parameters": [
+					{
+						"name": "title",
+						"in": "query",
+						"required": true,
+						"schema": { "type": "string", "title": "Title" }
+					},
+					{
+						"name": "price",
+						"in": "query",
+						"required": true,
+						"schema": { "type": "integer", "title": "Price" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/shop/colors": {
+			"get": {
+				"tags": ["shop"],
+				"summary": "Get Colors",
+				"operationId": "get_colors_shop_colors_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					}
+				}
+			}
+		},
+		"/shop/statuses": {
+			"get": {
+				"tags": ["shop"],
+				"summary": "Get Statuses",
+				"operationId": "get_statuses_shop_statuses_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					}
+				}
+			}
+		},
+		"/shop/buy/color/{color_id}": {
+			"post": {
+				"tags": ["shop"],
+				"summary": "Buy Color",
+				"operationId": "buy_color_shop_buy_color__color_id__post",
+				"parameters": [
+					{
+						"name": "color_id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Color Id" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/shop/buy/status/{status_id}": {
+			"post": {
+				"tags": ["shop"],
+				"summary": "Buy Status",
+				"operationId": "buy_status_shop_buy_status__status_id__post",
+				"parameters": [
+					{
+						"name": "status_id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Status Id" }
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/shop/seed": {
+			"post": {
+				"tags": ["shop"],
+				"summary": "Create Shop Items",
+				"operationId": "create_shop_items_shop_seed_post",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					}
+				}
+			}
+		},
+		"/modules": {
+			"get": {
+				"summary": "Get Modules",
+				"operationId": "get_modules_modules_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					}
+				}
+			}
+		},
+		"/modules/{id}": {
+			"get": {
+				"summary": "Get Course",
+				"operationId": "get_course_modules__id__get",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Id" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/comments": {
+			"post": {
+				"tags": ["comments"],
+				"summary": "Create Comment",
+				"operationId": "create_comment_comments_post",
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/CommentCreate" }
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/comments/lesson/{lesson_id}": {
+			"get": {
+				"tags": ["comments"],
+				"summary": "Get Comments",
+				"operationId": "get_comments_comments_lesson__lesson_id__get",
+				"parameters": [
+					{
+						"name": "lesson_id",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "title": "Lesson Id" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/recommendations/next": {
+			"get": {
+				"tags": ["recommendations"],
+				"summary": "Get Next Lesson",
+				"operationId": "get_next_lesson_recommendations_next_get",
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/analytics/weak-lessons": {
+			"get": {
+				"tags": ["analytics"],
+				"summary": "Weak Lessons",
+				"operationId": "weak_lessons_analytics_weak_lessons_get",
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/reward/daily": {
+			"post": {
+				"tags": ["reward"],
+				"summary": "Daily Reward",
+				"operationId": "daily_reward_reward_daily_post",
+				"parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"required": false,
+						"schema": { "type": "string", "title": "Authorization" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/DailyRewardResponse" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"CommentCreate": {
+				"properties": {
+					"lesson_id": {
+						"type": "integer",
+						"exclusiveMinimum": 0.0,
+						"title": "Lesson Id"
+					},
+					"content": {
+						"type": "string",
+						"maxLength": 1000,
+						"minLength": 1,
+						"title": "Content"
+					},
+					"parent_id": {
+						"anyOf": [
+							{ "type": "integer", "exclusiveMinimum": 0.0 },
+							{ "type": "null" }
+						],
+						"title": "Parent Id"
+					}
+				},
+				"type": "object",
+				"required": ["lesson_id", "content"],
+				"title": "CommentCreate"
+			},
+			"CourseCreate": {
+				"properties": {
+					"title": {
+						"type": "string",
+						"maxLength": 100,
+						"minLength": 3,
+						"title": "Title"
+					},
+					"description": {
+						"type": "string",
+						"maxLength": 2000,
+						"title": "Description"
+					}
+				},
+				"type": "object",
+				"required": ["title", "description"],
+				"title": "CourseCreate"
+			},
+			"DailyRewardResponse": {
+				"properties": {
+					"coins": { "type": "integer", "minimum": 0.0, "title": "Coins" },
+					"xp": { "type": "integer", "minimum": 0.0, "title": "Xp" },
+					"message": { "type": "string", "title": "Message" }
+				},
+				"type": "object",
+				"required": ["coins", "xp", "message"],
+				"title": "DailyRewardResponse"
+			},
+			"HTTPValidationError": {
+				"properties": {
+					"detail": {
+						"items": { "$ref": "#/components/schemas/ValidationError" },
+						"type": "array",
+						"title": "Detail"
+					}
+				},
+				"type": "object",
+				"title": "HTTPValidationError"
+			},
+			"LessonCreate": {
+				"properties": {
+					"module_id": {
+						"type": "integer",
+						"exclusiveMinimum": 0.0,
+						"title": "Module Id"
+					},
+					"title": {
+						"type": "string",
+						"maxLength": 100,
+						"minLength": 3,
+						"title": "Title"
+					},
+					"theory_content": {
+						"type": "string",
+						"maxLength": 10000,
+						"minLength": 5,
+						"title": "Theory Content"
+					},
+					"order": { "type": "integer", "minimum": 0.0, "title": "Order" }
+				},
+				"type": "object",
+				"required": ["module_id", "title", "theory_content", "order"],
+				"title": "LessonCreate"
+			},
+			"LoginRequest": {
+				"properties": {
+					"email": { "type": "string", "format": "email", "title": "Email" },
+					"password": {
+						"type": "string",
+						"maxLength": 100,
+						"minLength": 6,
+						"title": "Password"
+					}
+				},
+				"type": "object",
+				"required": ["email", "password"],
+				"title": "LoginRequest"
+			},
+			"ModuleCreate": {
+				"properties": {
+					"course_id": {
+						"type": "integer",
+						"exclusiveMinimum": 0.0,
+						"title": "Course Id"
+					},
+					"title": {
+						"type": "string",
+						"maxLength": 100,
+						"minLength": 3,
+						"title": "Title"
+					},
+					"order": { "type": "integer", "minimum": 0.0, "title": "Order" }
+				},
+				"type": "object",
+				"required": ["course_id", "title", "order"],
+				"title": "ModuleCreate"
+			},
+			"ParentLinkRequest": {
+				"properties": {
+					"parent_email": {
+						"type": "string",
+						"format": "email",
+						"title": "Parent Email"
+					}
+				},
+				"type": "object",
+				"required": ["parent_email"],
+				"title": "ParentLinkRequest"
+			},
+			"RegisterRequest": {
+				"properties": {
+					"email": { "type": "string", "format": "email", "title": "Email" },
+					"password": {
+						"type": "string",
+						"maxLength": 100,
+						"minLength": 6,
+						"title": "Password"
+					},
+					"nickname": {
+						"type": "string",
+						"maxLength": 30,
+						"minLength": 2,
+						"title": "Nickname"
+					},
+					"role": {
+						"type": "string",
+						"enum": ["student", "parent"],
+						"title": "Role"
+					}
+				},
+				"type": "object",
+				"required": ["email", "password", "nickname", "role"],
+				"title": "RegisterRequest"
+			},
+			"ReviewAttemptRequest": {
+				"properties": {
+					"is_correct": { "type": "boolean", "title": "Is Correct" }
+				},
+				"type": "object",
+				"required": ["is_correct"],
+				"title": "ReviewAttemptRequest"
+			},
+			"StartLessonRequest": {
+				"properties": {
+					"lesson_id": {
+						"type": "integer",
+						"exclusiveMinimum": 0.0,
+						"title": "Lesson Id"
+					}
+				},
+				"type": "object",
+				"required": ["lesson_id"],
+				"title": "StartLessonRequest"
+			},
+			"TaskCreate": {
+				"properties": {
+					"lesson_id": {
+						"type": "integer",
+						"exclusiveMinimum": 0.0,
+						"title": "Lesson Id"
+					},
+					"type": {
+						"type": "string",
+						"enum": ["quiz", "input", "code"],
+						"title": "Type"
+					},
+					"question": {
+						"type": "string",
+						"maxLength": 2000,
+						"minLength": 5,
+						"title": "Question"
+					},
+					"correct_answer": {
+						"anyOf": [
+							{ "type": "string", "maxLength": 5000 },
+							{ "type": "null" }
+						],
+						"title": "Correct Answer"
+					},
+					"coins": { "type": "integer", "minimum": 0.0, "title": "Coins" }
+				},
+				"type": "object",
+				"required": ["lesson_id", "type", "question", "coins"],
+				"title": "TaskCreate"
+			},
+			"TaskSubmit": {
+				"properties": {
+					"answer": {
+						"type": "string",
+						"maxLength": 5000,
+						"minLength": 1,
+						"title": "Answer"
+					}
+				},
+				"type": "object",
+				"required": ["answer"],
+				"title": "TaskSubmit"
+			},
+			"ValidationError": {
+				"properties": {
+					"loc": {
+						"items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
+						"type": "array",
+						"title": "Location"
+					},
+					"msg": { "type": "string", "title": "Message" },
+					"type": { "type": "string", "title": "Error Type" },
+					"input": { "title": "Input" },
+					"ctx": { "type": "object", "title": "Context" }
+				},
+				"type": "object",
+				"required": ["loc", "msg", "type"],
+				"title": "ValidationError"
+			}
+		}
+	}
+}

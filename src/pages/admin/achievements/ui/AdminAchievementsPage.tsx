@@ -2,7 +2,6 @@ import {
 	Alert,
 	App,
 	Button,
-	Card,
 	Col,
 	Empty,
 	Form,
@@ -24,6 +23,7 @@ import { PageHeader } from '@/shared/ui/layout/PageHeader';
 import { palette } from '@/shared/config/theme';
 import type { CreateAchievementPayload } from '@/features/achievement/api/achievement.api';
 import { useQueryClient } from '@tanstack/react-query';
+import { BaseCard } from '@/shared/ui/card/BaseCard';
 
 const { Text } = Typography;
 
@@ -92,9 +92,8 @@ export const AdminAchievementsPage = () => {
 				<Row gutter={[24, 24]}>
 					{/* Форма создания */}
 					<Col xs={24} lg={10}>
-						<Card
+						<BaseCard
 							title='Создать достижение'
-							style={{ borderColor: palette.pink }}
 							styles={{ header: { color: palette.navy } }}
 						>
 							<Form form={form} layout='vertical' onFinish={handleCreate}>
@@ -155,14 +154,13 @@ export const AdminAchievementsPage = () => {
 									Создать достижение
 								</Button>
 							</Form>
-						</Card>
+						</BaseCard>
 					</Col>
 
 					{/* Список достижений */}
 					<Col xs={24} lg={14}>
-						<Card
+						<BaseCard
 							title={`Все достижения (${achievements.data?.length ?? 0})`}
-							style={{ borderColor: palette.pink }}
 							styles={{ header: { color: palette.navy } }}
 						>
 							{achievements.isLoading && <Spin />}
@@ -175,7 +173,7 @@ export const AdminAchievementsPage = () => {
 								)}
 							<Space direction='vertical' style={{ width: '100%' }} size={10}>
 								{(achievements.data ?? []).map((achievement) => (
-									<Card
+									<BaseCard
 										key={achievement.id}
 										size='small'
 										style={{ borderColor: palette.borderSoft }}
@@ -218,10 +216,10 @@ export const AdminAchievementsPage = () => {
 												<Tag color='purple'>#{achievement.id}</Tag>
 											</Space>
 										</div>
-									</Card>
+									</BaseCard>
 								))}
 							</Space>
-						</Card>
+						</BaseCard>
 					</Col>
 				</Row>
 			</div>

@@ -1,107 +1,39 @@
 import { api } from '@/shared/api/client';
-import type { ProgressResponse } from './progress.types';
+import type { LessonDistribution, ProgressResponse } from './progress.types';
 
-const toNumber = (value: unknown, fallback = 0): number => {
-	if (typeof value === 'number' && Number.isFinite(value)) {
-		return value;
+export const getLessonDistribution = (
+	progress?: ProgressResponse,
+): LessonDistribution => {
+	if (!progress) {
+		return {
+			completed: 0,
+			startedNotCompleted: 0,
+			notStarted: 0,
+			total: 0,
+		};
 	}
 
-	if (typeof value === 'string') {
-		const parsed = Number(value);
-		if (Number.isFinite(parsed)) {
-			return parsed;
-		}
-	}
+	const completed = progress.completed_lessons ?? 0;
+	const started = progress.started_lessons ?? 0;
+	const notStarted = progress.not_started_lessons ?? 0;
 
-	return fallback;
-};
+	// важно: started включает completed
+	const startedNotCompleted = Math.max(0, started - completed);
 
-const toOptionalNumber = (value: unknown): number | undefined => {
-	if (typeof value === 'number' && Number.isFinite(value)) {
-		return value;
-	}
-
-	if (typeof value === 'string') {
-		const parsed = Number(value);
-		if (Number.isFinite(parsed)) {
-			return parsed;
-		}
-	}
-
-	return undefined;
-};
-
-const asRecord = (value: unknown): Record<string, unknown> | null => {
-	if (!value || typeof value !== 'object' || Array.isArray(value)) {
-		return null;
-	}
-
-	return value as Record<string, unknown>;
-};
-
-const normalizeProgress = (payload: unknown): ProgressResponse => {
-	const root = asRecord(payload) ?? {};
-	const progress = asRecord(root.progress) ?? {};
-	const stats = asRecord(root.stats) ?? {};
-	const taskProgress = asRecord(root.task_progress) ?? asRecord(root.tasks) ?? {};
-
-	const sources = [root, progress, stats];
-
-	const pick = (keys: string[]) => {
-		for (const source of sources) {
-			for (const key of keys) {
-				const value = source[key];
-				if (value !== undefined && value !== null) {
-					return value;
-				}
-			}
-		}
-		return undefined;
-	};
-
-	const completed = toNumber(
-		taskProgress.completed ??
-			pick(['completed_tasks']),
-		0,
-	);
-	const started = toNumber(
-		taskProgress.started ??
-			pick(['started_tasks']),
-		completed,
-	);
-	const total = toNumber(
-		taskProgress.total ??
-			pick(['total_tasks']),
-		Math.max(started, completed),
-	);
-	const notStarted = toNumber(
-		taskProgress.not_started ??
-			pick(['not_started_tasks']),
-		Math.max(0, total - started),
-	);
+	const total = completed + startedNotCompleted + notStarted;
 
 	return {
-		xp: toNumber(pick(['xp']), 0),
-		coins: toNumber(pick(['coins', 'balance', 'wallet']), 0),
-		completed_lessons: toNumber(pick(['completed_lessons', 'lessons_completed']), 0),
-		level: toOptionalNumber(pick(['level'])),
-		completed_tasks: completed,
-		started_tasks: started,
-		not_started_tasks: notStarted,
-		total_tasks: Math.max(total, completed + Math.max(0, started - completed) + notStarted),
-		task_progress: {
-			completed,
-			started,
-			not_started: notStarted,
-			total,
-		},
+		completed,
+		startedNotCompleted,
+		notStarted,
+		total,
 	};
 };
 
 export const progressApi = {
 	getMe: async (): Promise<ProgressResponse> => {
 		const res = await api.get('/progress/me');
-		return normalizeProgress(res.data);
+		return res.data;
 	},
 
 	startLesson: async (lesson_id: number) => {
@@ -109,3 +41,4 @@ export const progressApi = {
 		return res.data;
 	},
 };
+

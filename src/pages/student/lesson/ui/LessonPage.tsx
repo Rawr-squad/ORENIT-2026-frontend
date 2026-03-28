@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { Alert, Card, Col, Empty, Row, Spin, Tag } from 'antd';
+import { Alert, Col, Empty, Row, Spin, Tag } from 'antd';
 import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLesson } from '@/entities/lesson/api/useLesson';
@@ -12,6 +12,7 @@ import { TaskRenderer } from '@/features/task/ui/TaskRenderer';
 import { palette } from '@/shared/config/theme';
 import { PageHeader } from '@/shared/ui/layout/PageHeader';
 import { Markdown } from '@/shared/ui/Markdown';
+import { BaseCard } from '@/shared/ui/card/BaseCard';
 
 const resolveTaskState = (task: Task | null) => {
 	if (!task) {
@@ -61,20 +62,23 @@ const wasStartedInClient = (userId: number | undefined, lessonId: number) => {
 	}
 
 	try {
-		const marker = window.localStorage.getItem(getStartStorageKey(userId, lessonId));
+		const marker = localStorage.getItem(getStartStorageKey(userId, lessonId));
 		return marker === 'requested' || marker === 'started';
 	} catch {
 		return false;
 	}
 };
 
-const markStartRequestedInClient = (userId: number | undefined, lessonId: number) => {
+const markStartRequestedInClient = (
+	userId: number | undefined,
+	lessonId: number,
+) => {
 	if (!userId) {
 		return;
 	}
 
 	try {
-		window.localStorage.setItem(getStartStorageKey(userId, lessonId), 'requested');
+		localStorage.setItem(getStartStorageKey(userId, lessonId), 'requested');
 	} catch {
 		// noop
 	}
@@ -86,19 +90,22 @@ const markStartedInClient = (userId: number | undefined, lessonId: number) => {
 	}
 
 	try {
-		window.localStorage.setItem(getStartStorageKey(userId, lessonId), 'started');
+		localStorage.setItem(getStartStorageKey(userId, lessonId), 'started');
 	} catch {
 		// noop
 	}
 };
 
-const clearStartRequestedInClient = (userId: number | undefined, lessonId: number) => {
+const clearStartRequestedInClient = (
+	userId: number | undefined,
+	lessonId: number,
+) => {
 	if (!userId) {
 		return;
 	}
 
 	try {
-		window.localStorage.removeItem(getStartStorageKey(userId, lessonId));
+		localStorage.removeItem(getStartStorageKey(userId, lessonId));
 	} catch {
 		// noop
 	}
@@ -121,7 +128,13 @@ export const LessonPage = () => {
 		}) ?? false;
 
 	useEffect(() => {
-		if (!lessonId || Number.isNaN(lessonId) || !user?.id || isLoading || !lesson) {
+		if (
+			!lessonId ||
+			Number.isNaN(lessonId) ||
+			!user?.id ||
+			isLoading ||
+			!lesson
+		) {
 			return;
 		}
 
@@ -168,11 +181,11 @@ export const LessonPage = () => {
 			return;
 		}
 
-		const intervalId = window.setInterval(() => {
+		const intervalId = setInterval(() => {
 			refetch();
 		}, 10_000);
 
-		return () => window.clearInterval(intervalId);
+		return () => clearInterval(intervalId);
 	}, [refetch, taskState.isPendingCode]);
 
 	useEffect(() => {
@@ -188,7 +201,13 @@ export const LessonPage = () => {
 	}
 
 	if (isError || !lesson) {
-		return <Alert style={{ margin: 24 }} type='error' message='Не удалось загрузить урок' />;
+		return (
+			<Alert
+				style={{ margin: 24 }}
+				type='error'
+				message='Не удалось загрузить урок'
+			/>
+		);
 	}
 
 	return (
@@ -202,22 +221,24 @@ export const LessonPage = () => {
 			<div style={{ padding: 24 }}>
 				<Row gutter={16}>
 					<Col xs={24} xl={14}>
-						<Card
+						<BaseCard
 							title='Теория'
-							style={{ borderColor: palette.pink, marginBottom: 16 }}
+							style={{ marginBottom: 16 }}
 							styles={{ header: { borderBottom: 'none', color: palette.navy } }}
 						>
-							<Markdown content={lesson.theory_content || 'Теория пока отсутствует.'} />
-						</Card>
+							<Markdown
+								content={lesson.theory_content || 'Теория пока отсутствует.'}
+							/>
+						</BaseCard>
 					</Col>
 
 					<Col xs={24} xl={10}>
 						{lessonTask ? (
 							<TaskRenderer task={lessonTask} lessonId={lessonId} />
 						) : (
-							<Card title='Задание' style={{ borderColor: palette.pink }}>
+							<BaseCard title='Задание'>
 								<Empty description='В этом уроке пока нет задания' />
-							</Card>
+							</BaseCard>
 						)}
 						<LessonComments lessonId={lessonId} />
 					</Col>
@@ -226,3 +247,4 @@ export const LessonPage = () => {
 		</div>
 	);
 };
+

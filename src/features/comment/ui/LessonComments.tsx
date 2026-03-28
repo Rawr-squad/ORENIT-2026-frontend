@@ -1,14 +1,4 @@
-﻿import {
-	Alert,
-	App,
-	Button,
-	Card,
-	Empty,
-	Input,
-	Space,
-	Spin,
-	Typography,
-} from 'antd';
+﻿import { Alert, App, Button, Input, Space, Spin, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import type { LessonComment } from '@/entities/comment/model/comment.types';
 import { useCreateComment } from '../api/useCreateComment';
@@ -16,6 +6,7 @@ import { useLessonComments } from '../api/useLessonComments';
 import { palette } from '@/shared/config/theme';
 import { UserIdentity } from '@/shared/ui/user/UserIdentity';
 import { useAuthStore } from '@/entities/user/model/auth.store';
+import { BaseCard } from '@/shared/ui/card/BaseCard';
 
 const { Text } = Typography;
 
@@ -59,7 +50,7 @@ const CommentNode = ({
 
 	return (
 		<div style={{ marginTop: depth === 0 ? 0 : 10, marginLeft }}>
-			<Card size='small' style={{ borderColor: palette.borderSoft }}>
+			<BaseCard size='small'>
 				<Space orientation='vertical' size={6} style={{ width: '100%' }}>
 					<div
 						style={{
@@ -117,7 +108,7 @@ const CommentNode = ({
 						</Space>
 					)}
 				</Space>
-			</Card>
+			</BaseCard>
 
 			<Space orientation='vertical' style={{ width: '100%', marginTop: 8 }}>
 				{comment.replies.map((reply) => (
@@ -214,7 +205,7 @@ export const LessonComments = ({ lessonId }: Props) => {
 	}
 
 	return (
-		<Card title='Комментарии' style={{ borderColor: palette.pink, marginTop: 16 }}>
+		<BaseCard title='Комментарии' style={{ marginTop: 16 }}>
 			<Space orientation='vertical' style={{ width: '100%' }} size={12}>
 				<Space align='start' style={{ width: '100%' }}>
 					<UserIdentity
@@ -255,7 +246,6 @@ export const LessonComments = ({ lessonId }: Props) => {
 					</Space>
 				</Space>
 
-				{comments.length === 0 && <Empty description='Комментариев пока нет' />}
 				{comments.map((comment) => (
 					<CommentNode
 						key={comment.id}
@@ -275,7 +265,7 @@ export const LessonComments = ({ lessonId }: Props) => {
 					/>
 				))}
 			</Space>
-		</Card>
+		</BaseCard>
 	);
 };
 

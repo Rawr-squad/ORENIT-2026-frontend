@@ -37,6 +37,7 @@ export const useLogin = () => {
 		},
 		onSuccess: ({ user, token }) => {
 			setUser(user);
+			setToken(token);
 			queryClient.setQueryData(['me', token], user);
 			queryClient.invalidateQueries({ queryKey: ['courses'] });
 			queryClient.invalidateQueries({ queryKey: ['progress'] });
@@ -44,3 +45,4 @@ export const useLogin = () => {
 		},
 	});
 };
+

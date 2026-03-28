@@ -1,8 +1,9 @@
-﻿import { Button, Card, Form, Input, Select, Typography } from 'antd';
+﻿import { Button, Form, Input, Select, Typography } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRegister } from '@/features/auth/api/useRegister';
 import type { RegisterRequest } from '@/shared/types/auth';
 import { palette } from '@/shared/config/theme';
+import { BaseCard } from '@/shared/ui/card/BaseCard';
 
 const { Title, Text } = Typography;
 
@@ -30,11 +31,10 @@ export const RegisterPage = () => {
 					'radial-gradient(circle at 15% 0%, #F6D8EE 0%, #FFFDF5 42%, #F8FFA1 100%)',
 			}}
 		>
-			<Card
+			<BaseCard
 				style={{
 					width: '100%',
 					maxWidth: 460,
-					borderColor: palette.pink,
 					boxShadow: '0 18px 45px rgba(36,49,104,0.08)',
 				}}
 			>
@@ -56,7 +56,14 @@ export const RegisterPage = () => {
 					<Form.Item
 						name='nickname'
 						label='Никнейм'
-						rules={[{ required: true }]}
+						rules={[
+							{
+								required: true,
+								min: 2,
+								max: 30,
+								message: 'Никнейм должен быть от 2 до 30 символов длиной',
+							},
+						]}
 					>
 						<Input placeholder='Alex' />
 					</Form.Item>
@@ -64,7 +71,10 @@ export const RegisterPage = () => {
 					<Form.Item
 						name='email'
 						label='Почта'
-						rules={[{ required: true, type: 'email' }]}
+						rules={[
+							{ required: true, message: 'Введите email' },
+							{ type: 'email', message: 'Некорректный email' },
+						]}
 					>
 						<Input placeholder='alex@example.com' />
 					</Form.Item>
@@ -72,7 +82,13 @@ export const RegisterPage = () => {
 					<Form.Item
 						name='password'
 						label='Пароль'
-						rules={[{ required: true, min: 6 }]}
+						rules={[
+							{
+								required: true,
+								min: 6,
+								message: 'Длина пароля должна быть не менее 6 символов',
+							},
+						]}
 					>
 						<Input.Password placeholder='********' />
 					</Form.Item>
@@ -111,7 +127,7 @@ export const RegisterPage = () => {
 				>
 					Уже есть аккаунт? <Link to='/login'>Войти</Link>
 				</div>
-			</Card>
+			</BaseCard>
 		</div>
 	);
 };

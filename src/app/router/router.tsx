@@ -9,9 +9,9 @@ const LazyRoleHomeRedirect = lazy(async () => {
 	return { default: module.RoleHomeRedirect };
 });
 
-const LazyAppShell = lazy(async () => {
-	const module = await import('@/shared/ui/layout/AppShell');
-	return { default: module.AppShell };
+const LazyAppLayout = lazy(async () => {
+	const module = await import('@/shared/ui/layout/AppLayout');
+	return { default: module.AppLayout };
 });
 
 const LazyLoginPage = lazy(async () => {
@@ -132,7 +132,7 @@ export const router = createBrowserRouter([
 		element: renderLazy(LazyRegisterPage),
 	},
 	{
-		element: <ProtectedRoute>{renderLazy(LazyAppShell)}</ProtectedRoute>,
+		element: renderLazy(LazyAppLayout),
 		children: [
 			{
 				path: '/student/dashboard',

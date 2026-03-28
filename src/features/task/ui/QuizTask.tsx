@@ -1,10 +1,11 @@
-﻿import { Alert, Button, Card, Radio, Space, Tag } from 'antd';
+﻿import { Alert, Button, Radio, Space, Tag } from 'antd';
 import { useState } from 'react';
 import type { QuizTask } from '@/entities/task/model/task.types';
 import type { TaskAttempt } from '@/entities/task/model/taskAttempt.types';
 import { useTaskSubmit } from '../api/useTaskSubmit';
 import { Markdown } from '@/shared/ui/Markdown';
 import { palette } from '@/shared/config/theme';
+import { BaseCard } from '@/shared/ui/card/BaseCard';
 
 type Props = {
 	task: QuizTask;
@@ -29,7 +30,9 @@ const toInitialAttempt = (task: QuizTask): TaskAttempt | null => {
 
 export const QuizTaskComponent = ({ task, lessonId }: Props) => {
 	const [value, setValue] = useState<string>('');
-	const [result, setResult] = useState<TaskAttempt | null>(() => toInitialAttempt(task));
+	const [result, setResult] = useState<TaskAttempt | null>(() =>
+		toInitialAttempt(task),
+	);
 	const submit = useTaskSubmit();
 
 	const options = Array.isArray(task.options) ? task.options : [];
@@ -44,7 +47,7 @@ export const QuizTaskComponent = ({ task, lessonId }: Props) => {
 	};
 
 	return (
-		<Card style={{ borderColor: palette.pink }}>
+		<BaseCard>
 			<Markdown content={task.question} />
 
 			{result?.status === 'pending' && (
@@ -60,9 +63,9 @@ export const QuizTaskComponent = ({ task, lessonId }: Props) => {
 			>
 				<Space orientation='vertical' style={{ width: '100%' }}>
 					{options.map((option) => (
-						<Card key={option} bodyStyle={{ padding: 10 }}>
+						<BaseCard key={option} bodyStyle={{ padding: 10 }}>
 							<Radio value={option}>{option}</Radio>
-						</Card>
+						</BaseCard>
 					))}
 				</Space>
 			</Radio.Group>
@@ -84,7 +87,7 @@ export const QuizTaskComponent = ({ task, lessonId }: Props) => {
 					message={result.is_correct ? 'Верный ответ' : 'Попробуйте еще раз'}
 				/>
 			)}
-		</Card>
+		</BaseCard>
 	);
 };
 

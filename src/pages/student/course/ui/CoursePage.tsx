@@ -1,12 +1,22 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Alert, Button, Card, Collapse, Empty, List, Skeleton, Tag, Typography } from 'antd';
+import {
+	Alert,
+	Button,
+	Collapse,
+	Empty,
+	List,
+	Skeleton,
+	Tag,
+	Typography,
+} from 'antd';
 import type { Module } from '@/entities/course/model/course.types';
 import { useCourse } from '@/features/course/api/useCourse';
 import { useModule } from '@/entities/module/api/useModule';
 import { PageHeader } from '@/shared/ui/layout/PageHeader';
 import { Markdown } from '@/shared/ui/Markdown';
 import { palette } from '@/shared/config/theme';
+import { BaseCard } from '@/shared/ui/card/BaseCard';
 
 const { Text } = Typography;
 
@@ -27,7 +37,7 @@ const ModuleLessons = ({ moduleId }: { moduleId: number }) => {
 	}
 
 	return (
-		<Card style={{ borderColor: palette.pink }}>
+		<BaseCard>
 			<List
 				dataSource={moduleQuery.data.lessons}
 				renderItem={(lesson, lessonIndex) => (
@@ -41,7 +51,7 @@ const ModuleLessons = ({ moduleId }: { moduleId: number }) => {
 					</List.Item>
 				)}
 			/>
-		</Card>
+		</BaseCard>
 	);
 };
 
@@ -58,7 +68,13 @@ export const CoursePage = () => {
 	}
 
 	if (isError || !course) {
-		return <Alert style={{ margin: 24 }} type='error' message='Не удалось загрузить курс' />;
+		return (
+			<Alert
+				style={{ margin: 24 }}
+				type='error'
+				message='Не удалось загрузить курс'
+			/>
+		);
 	}
 
 	return (
@@ -67,14 +83,20 @@ export const CoursePage = () => {
 				title={course.title}
 				subtitle='Обзор курса и модулей'
 				rightSlot={
-					<Button onClick={() => navigate('/student/courses')}>К списку курсов</Button>
+					<Button onClick={() => navigate('/student/courses')}>
+						К списку курсов
+					</Button>
 				}
 			/>
 			<div style={{ padding: 24 }}>
-				<Card style={{ borderColor: palette.pink, marginBottom: 16 }}>
-					<Markdown content={course.description || 'Описание пока отсутствует.'} />
-				</Card>
-				{course.modules.length === 0 && <Empty description='В этом курсе пока нет модулей' />}
+				<BaseCard style={{ marginBottom: 16 }}>
+					<Markdown
+						content={course.description || 'Описание пока отсутствует.'}
+					/>
+				</BaseCard>
+				{course.modules.length === 0 && (
+					<Empty description='В этом курсе пока нет модулей' />
+				)}
 				<Collapse
 					accordion
 					activeKey={activeModuleKey ?? undefined}
@@ -89,11 +111,16 @@ export const CoursePage = () => {
 					items={course.modules.map((module: Module, moduleIndex: number) => ({
 						key: String(module.id),
 						label: (
-							<div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+							<div
+								style={{
+									display: 'flex',
+									justifyContent: 'space-between',
+									width: '100%',
+								}}
+							>
 								<span>
 									{moduleIndex + 1}. {module.title}
 								</span>
-								<Tag>Нажмите, чтобы открыть уроки</Tag>
 							</div>
 						),
 						children:
@@ -106,3 +133,4 @@ export const CoursePage = () => {
 		</div>
 	);
 };
+

@@ -3,7 +3,6 @@ import {
 	Alert,
 	App,
 	Button,
-	Card,
 	Col,
 	Empty,
 	Form,
@@ -20,7 +19,12 @@ import {
 	Tooltip,
 	Typography,
 } from 'antd';
-import { DeleteOutlined, EditOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+	DeleteOutlined,
+	EditOutlined,
+	MinusCircleOutlined,
+	PlusOutlined,
+} from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
 import type {
 	LessonCreate,
@@ -42,6 +46,7 @@ import { useDeleteTask } from '@/features/admin/task/api/useDeleteTask';
 import { PageHeader } from '@/shared/ui/layout/PageHeader';
 import { MarkdownEditor } from '@/shared/ui/MarkdownEditor';
 import { palette } from '@/shared/config/theme';
+import { BaseCard } from '@/shared/ui/card/BaseCard';
 
 const { Text } = Typography;
 
@@ -402,7 +407,7 @@ export const AdminCourseDetailPage = () => {
 			<div style={{ padding: 24 }}>
 				<Row gutter={[16, 16]}>
 					<Col xs={24} xl={7}>
-						<Card
+						<BaseCard
 							title='Модули'
 							style={{ borderColor: palette.pink }}
 							extra={
@@ -411,23 +416,32 @@ export const AdminCourseDetailPage = () => {
 								</Tooltip>
 							}
 						>
-							{course.modules.length === 0 && <Empty description='Пока нет модулей' />}
+							{course.modules.length === 0 && (
+								<Empty description='Пока нет модулей' />
+							)}
 							<Space orientation='vertical' style={{ width: '100%' }}>
 								{course.modules.map((module) => (
-									<Card
+									<BaseCard
 										key={module.id}
 										size='small'
 										style={{
 											cursor: 'pointer',
 											borderColor:
-												selectedModuleId === module.id ? palette.purple : palette.borderSoft,
+												selectedModuleId === module.id
+													? palette.purple
+													: palette.borderSoft,
 										}}
 										onClick={() => {
 											setSelectedModuleId(module.id);
 											setSelectedLessonId(null);
 										}}
 									>
-										<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+										<div
+											style={{
+												display: 'flex',
+												justifyContent: 'space-between',
+											}}
+										>
 											<Text strong style={{ color: palette.navy }}>
 												{module.title}
 											</Text>
@@ -438,11 +452,18 @@ export const AdminCourseDetailPage = () => {
 														icon={<EditOutlined />}
 														onClick={(event) => {
 															event.stopPropagation();
-															openEditModule(module.id, module.title, module.order);
+															openEditModule(
+																module.id,
+																module.title,
+																module.order,
+															);
 														}}
 													/>
 												</Tooltip>
-												<Popconfirm title='Удалить модуль?' onConfirm={() => deleteModule.mutate(module.id)}>
+												<Popconfirm
+													title='Удалить модуль?'
+													onConfirm={() => deleteModule.mutate(module.id)}
+												>
 													<Tooltip title='Удалить модуль'>
 														<Button
 															type='text'
@@ -454,14 +475,14 @@ export const AdminCourseDetailPage = () => {
 												</Popconfirm>
 											</Space>
 										</div>
-									</Card>
+									</BaseCard>
 								))}
 							</Space>
-						</Card>
+						</BaseCard>
 					</Col>
 
 					<Col xs={24} xl={8}>
-						<Card
+						<BaseCard
 							title='Уроки'
 							style={{ borderColor: palette.pink }}
 							extra={
@@ -474,18 +495,25 @@ export const AdminCourseDetailPage = () => {
 								</Tooltip>
 							}
 						>
-							{!selectedModuleId && <Empty description='Сначала выберите модуль' />}
-							{selectedModuleId && isModuleLoading && <Spin />}
-							{selectedModuleId && !isModuleLoading && selectedModule?.lessons.length === 0 && (
-								<Empty description='Пока нет уроков' />
+							{!selectedModuleId && (
+								<Empty description='Сначала выберите модуль' />
 							)}
+							{selectedModuleId && isModuleLoading && <Spin />}
+							{selectedModuleId &&
+								!isModuleLoading &&
+								selectedModule?.lessons.length === 0 && (
+									<Empty description='Пока нет уроков' />
+								)}
 							<List
 								dataSource={selectedModule?.lessons ?? []}
 								renderItem={(lesson) => (
 									<List.Item
 										style={{
 											cursor: 'pointer',
-											background: selectedLessonId === lesson.id ? '#f9f3ff' : 'transparent',
+											background:
+												selectedLessonId === lesson.id
+													? '#f9f3ff'
+													: 'transparent',
 											borderRadius: 10,
 											paddingInline: 10,
 										}}
@@ -497,11 +525,19 @@ export const AdminCourseDetailPage = () => {
 													icon={<EditOutlined />}
 													onClick={(event) => {
 														event.stopPropagation();
-														openEditLesson(lesson.id, lesson.title, lesson.order);
+														openEditLesson(
+															lesson.id,
+															lesson.title,
+															lesson.order,
+														);
 													}}
 												/>
 											</Tooltip>,
-											<Popconfirm key='delete' title='Удалить урок?' onConfirm={() => deleteLesson.mutate(lesson.id)}>
+											<Popconfirm
+												key='delete'
+												title='Удалить урок?'
+												onConfirm={() => deleteLesson.mutate(lesson.id)}
+											>
 												<Tooltip title='Удалить урок'>
 													<Button
 														type='text'
@@ -517,11 +553,11 @@ export const AdminCourseDetailPage = () => {
 									</List.Item>
 								)}
 							/>
-						</Card>
+						</BaseCard>
 					</Col>
 
 					<Col xs={24} xl={9}>
-						<Card
+						<BaseCard
 							title='Задание урока (одно на урок)'
 							style={{ borderColor: palette.pink }}
 							extra={
@@ -534,26 +570,37 @@ export const AdminCourseDetailPage = () => {
 								</Tooltip>
 							}
 						>
-							{!selectedLessonId && <Empty description='Сначала выберите урок' />}
+							{!selectedLessonId && (
+								<Empty description='Сначала выберите урок' />
+							)}
 							{selectedLessonId && isLessonLoading && <Spin />}
 							{selectedLessonId && !isLessonLoading && !primaryTask && (
 								<Empty description='Задание еще не создано' />
 							)}
 							{primaryTask && (
-								<Card
+								<BaseCard
 									size='small'
-									style={{ borderColor: palette.borderSoft, cursor: 'pointer' }}
+									style={{ cursor: 'pointer' }}
 									onClick={openEditTask}
 								>
-									<Space orientation='vertical' size={6} style={{ width: '100%' }}>
+									<Space
+										orientation='vertical'
+										size={6}
+										style={{ width: '100%' }}
+									>
 										<Space>
 											<Tag>{taskTypeLabel[primaryTask.type]}</Tag>
-											<Tag color='processing'>{primaryTask.coins ?? 0} монет</Tag>
+											<Tag color='processing'>
+												{primaryTask.coins ?? 0} монет
+											</Tag>
 										</Space>
 										<Text strong style={{ color: palette.navy }}>
 											{primaryTask.question}
 										</Text>
-										<Popconfirm title='Удалить задание?' onConfirm={() => deleteTask.mutate(primaryTask.id)}>
+										<Popconfirm
+											title='Удалить задание?'
+											onConfirm={() => deleteTask.mutate(primaryTask.id)}
+										>
 											<Tooltip title='Удалить задание'>
 												<Button
 													type='text'
@@ -564,7 +611,7 @@ export const AdminCourseDetailPage = () => {
 											</Tooltip>
 										</Popconfirm>
 									</Space>
-								</Card>
+								</BaseCard>
 							)}
 							{extraTasks.length > 0 && (
 								<Alert
@@ -580,9 +627,17 @@ export const AdminCourseDetailPage = () => {
 									renderItem={(task) => (
 										<List.Item
 											actions={[
-												<Popconfirm key='delete-extra' title='Удалить лишнее задание?' onConfirm={() => deleteTask.mutate(task.id)}>
+												<Popconfirm
+													key='delete-extra'
+													title='Удалить лишнее задание?'
+													onConfirm={() => deleteTask.mutate(task.id)}
+												>
 													<Tooltip title='Удалить задание'>
-														<Button type='text' danger icon={<DeleteOutlined />} />
+														<Button
+															type='text'
+															danger
+															icon={<DeleteOutlined />}
+														/>
 													</Tooltip>
 												</Popconfirm>,
 											]}
@@ -592,14 +647,16 @@ export const AdminCourseDetailPage = () => {
 									)}
 								/>
 							)}
-						</Card>
+						</BaseCard>
 					</Col>
 				</Row>
 			</div>
 
 			<Modal
 				open={moduleModal.open}
-				title={moduleModal.editingId ? 'Редактирование модуля' : 'Создание модуля'}
+				title={
+					moduleModal.editingId ? 'Редактирование модуля' : 'Создание модуля'
+				}
 				onCancel={() => setModuleModal({ open: false, editingId: null })}
 				onOk={() => moduleForm.submit()}
 				confirmLoading={createModule.isPending || updateModule.isPending}
@@ -617,7 +674,9 @@ export const AdminCourseDetailPage = () => {
 			<Modal
 				open={lessonModal.open}
 				width={920}
-				title={lessonModal.editingId ? 'Редактирование урока' : 'Создание урока'}
+				title={
+					lessonModal.editingId ? 'Редактирование урока' : 'Создание урока'
+				}
 				onCancel={() => setLessonModal({ open: false, editingId: null })}
 				onOk={() => lessonForm.submit()}
 				confirmLoading={createLesson.isPending || updateLesson.isPending}
@@ -631,7 +690,10 @@ export const AdminCourseDetailPage = () => {
 						label='Теория (Markdown)'
 						rules={[{ required: true }]}
 					>
-						<MarkdownEditor height={320} placeholder='Введите теорию урока...' />
+						<MarkdownEditor
+							height={320}
+							placeholder='Введите теорию урока...'
+						/>
 					</Form.Item>
 					<Form.Item name='order' label='Порядок' rules={[{ required: true }]}>
 						<InputNumber min={1} style={{ width: '100%' }} />
@@ -641,7 +703,9 @@ export const AdminCourseDetailPage = () => {
 
 			<Modal
 				open={taskModal.open}
-				title={taskModal.editingId ? 'Редактирование задания' : 'Создание задания'}
+				title={
+					taskModal.editingId ? 'Редактирование задания' : 'Создание задания'
+				}
 				onCancel={() => setTaskModal({ open: false, editingId: null })}
 				onOk={() => taskForm.submit()}
 				confirmLoading={createTask.isPending || updateTask.isPending}
@@ -694,7 +758,10 @@ export const AdminCourseDetailPage = () => {
 												<Form.Item
 													name={field.name}
 													rules={[
-														{ required: true, message: 'Вариант ответа обязателен' },
+														{
+															required: true,
+															message: 'Вариант ответа обязателен',
+														},
 													]}
 													style={{ marginBottom: 0, width: 280 }}
 												>
@@ -728,6 +795,4 @@ export const AdminCourseDetailPage = () => {
 		</div>
 	);
 };
-
-
 

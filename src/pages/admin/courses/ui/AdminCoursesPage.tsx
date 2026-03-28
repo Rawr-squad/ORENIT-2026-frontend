@@ -13,7 +13,10 @@ import {
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import type { ColumnsType } from 'antd/es/table';
-import type { CourseCreate, CoursePreview } from '@/entities/course/model/course.types';
+import type {
+	CourseCreate,
+	CoursePreview,
+} from '@/entities/course/model/course.types';
 import { useCoursesAdmin } from '@/features/admin/course/api/useCoursesAdmin';
 import { useCreateCourse } from '@/features/admin/course/api/useCreateCourse';
 import { useUpdateCourse } from '@/features/admin/course/api/useUpdateCourse';
@@ -33,7 +36,9 @@ export const AdminCoursesPage = () => {
 	const [form] = Form.useForm<FormValues>();
 	const navigate = useNavigate();
 	const [open, setOpen] = useState(false);
-	const [editingCourse, setEditingCourse] = useState<CoursePreview | null>(null);
+	const [editingCourse, setEditingCourse] = useState<CoursePreview | null>(
+		null,
+	);
 
 	const { data, isLoading } = useCoursesAdmin();
 	const createCourse = useCreateCourse();
@@ -75,7 +80,10 @@ export const AdminCoursesPage = () => {
 				title: 'Описание',
 				dataIndex: 'description',
 				render: (description: string) => (
-					<Text ellipsis={{ tooltip: description }} style={{ color: palette.textSecondary }}>
+					<Text
+						ellipsis={{ tooltip: description }}
+						style={{ color: palette.textSecondary }}
+					>
 						{description}
 					</Text>
 				),
@@ -144,9 +152,6 @@ export const AdminCoursesPage = () => {
 					})}
 					style={{ background: '#fff', borderRadius: 14, overflow: 'hidden' }}
 				/>
-				<Text style={{ color: palette.textSecondary }}>
-					Откройте курс кликом по строке.
-				</Text>
 			</div>
 
 			<Modal
@@ -166,10 +171,14 @@ export const AdminCoursesPage = () => {
 						label='Описание (Markdown)'
 						rules={[{ required: true }]}
 					>
-						<MarkdownEditor height={280} placeholder='Введите описание курса...' />
+						<MarkdownEditor
+							height={280}
+							placeholder='Введите описание курса...'
+						/>
 					</Form.Item>
 				</Form>
 			</Modal>
 		</div>
 	);
 };
+

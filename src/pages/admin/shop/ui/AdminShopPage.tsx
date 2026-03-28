@@ -2,7 +2,6 @@ import {
 	Alert,
 	App,
 	Button,
-	Card,
 	Col,
 	Form,
 	Input,
@@ -23,6 +22,7 @@ import {
 } from '@/features/shop/api/useShopAdmin';
 import { PageHeader } from '@/shared/ui/layout/PageHeader';
 import { palette } from '@/shared/config/theme';
+import { BaseCard } from '@/shared/ui/card/BaseCard';
 
 const { Text, Title } = Typography;
 
@@ -99,9 +99,8 @@ export const AdminShopPage = () => {
 				<Row gutter={[24, 24]}>
 					{/* Цвета ника */}
 					<Col xs={24} lg={12}>
-						<Card
+						<BaseCard
 							title='Цвета ника'
-							style={{ borderColor: palette.pink }}
 							styles={{ header: { color: palette.navy } }}
 						>
 							<Form
@@ -177,14 +176,13 @@ export const AdminShopPage = () => {
 									)}
 								</Space>
 							</div>
-						</Card>
+						</BaseCard>
 					</Col>
 
 					{/* Кастомные подписи */}
 					<Col xs={24} lg={12}>
-						<Card
+						<BaseCard
 							title='Кастомные подписи'
-							style={{ borderColor: palette.pink }}
 							styles={{ header: { color: palette.navy } }}
 						>
 							<Form
@@ -240,7 +238,7 @@ export const AdminShopPage = () => {
 										)}
 								</Space>
 							</div>
-						</Card>
+						</BaseCard>
 					</Col>
 				</Row>
 			</div>

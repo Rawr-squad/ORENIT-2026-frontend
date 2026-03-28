@@ -1,8 +1,9 @@
-﻿import { Card, Col, Row, Spin, Tag, Typography } from 'antd';
+﻿import { Col, Row, Spin, Tag, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '@/shared/ui/layout/PageHeader';
 import { palette } from '@/shared/config/theme';
 import { usePendingCodeAttempts } from '@/features/admin/review/api/usePendingCodeAttempts';
+import { BaseCard } from '@/shared/ui/card/BaseCard';
 
 const { Text } = Typography;
 
@@ -57,9 +58,9 @@ export const AdminDashboardPage = () => {
 				<Row gutter={[16, 16]}>
 					{cards.map((card) => (
 						<Col xs={24} md={12} key={card.path}>
-							<Card
+							<BaseCard
 								hoverable
-								style={{ borderColor: palette.pink, minHeight: 100 }}
+								style={{ minHeight: 100 }}
 								onClick={() => navigate(card.path)}
 							>
 								<div
@@ -77,7 +78,7 @@ export const AdminDashboardPage = () => {
 								<div style={{ color: palette.textSecondary, marginTop: 8 }}>
 									{card.description}
 								</div>
-							</Card>
+							</BaseCard>
 						</Col>
 					))}
 				</Row>
