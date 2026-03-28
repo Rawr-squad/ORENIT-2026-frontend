@@ -1,10 +1,11 @@
-import { Alert, App, Button, Card, Input, Tag } from 'antd';
+import { Alert, App, Button, Input, Tag } from 'antd';
 import { useState } from 'react';
 import type { InputTask as InputTaskType } from '@/entities/task/model/task.types';
 import type { TaskAttempt } from '@/entities/task/model/taskAttempt.types';
 import { useTaskSubmit } from '../api/useTaskSubmit';
 import { Markdown } from '@/shared/ui/Markdown';
 import { palette } from '@/shared/config/theme';
+import { BaseCard } from '@/shared/ui/card/BaseCard';
 
 type Props = {
 	task: InputTaskType;
@@ -30,7 +31,9 @@ const toInitialAttempt = (task: InputTaskType): TaskAttempt | null => {
 export const InputTaskComponent = ({ task, lessonId }: Props) => {
 	const { message } = App.useApp();
 	const [value, setValue] = useState('');
-	const [result, setResult] = useState<TaskAttempt | null>(() => toInitialAttempt(task));
+	const [result, setResult] = useState<TaskAttempt | null>(() =>
+		toInitialAttempt(task),
+	);
 	const submit = useTaskSubmit();
 
 	const handleSubmit = () => {
@@ -46,7 +49,7 @@ export const InputTaskComponent = ({ task, lessonId }: Props) => {
 	};
 
 	return (
-		<Card style={{ borderColor: palette.pink }}>
+		<BaseCard>
 			<Markdown content={task.question} />
 			{result?.status === 'pending' && (
 				<div style={{ marginTop: 8 }}>
@@ -75,6 +78,7 @@ export const InputTaskComponent = ({ task, lessonId }: Props) => {
 					message={result.is_correct ? 'Верный ответ' : 'Неверный ответ'}
 				/>
 			)}
-		</Card>
+		</BaseCard>
 	);
 };
+

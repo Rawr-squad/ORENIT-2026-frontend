@@ -1,4 +1,4 @@
-import { Alert, Card, Col, Empty, Row, Spin, Statistic, Tag, Typography } from 'antd';
+import { Alert, Col, Empty, Row, Spin, Statistic, Tag, Typography } from 'antd';
 import { useProgress } from '@/features/progress/api/useProgress';
 import { useMyAchievements } from '@/features/achievement/api/useMyAchievements';
 import { useAuthStore } from '@/entities/user/model/auth.store';
@@ -7,6 +7,8 @@ import { PageHeader } from '@/shared/ui/layout/PageHeader';
 import { UserIdentity } from '@/shared/ui/user/UserIdentity';
 import { XPDisplay } from '@/widgets/progress/ui/XPDisplay';
 import { palette } from '@/shared/config/theme';
+import { BaseCard } from '@/shared/ui/card/BaseCard';
+import { ParentLinkForm } from '@/features/parent-link/ui/ParentLinkForm';
 
 const { Text, Title } = Typography;
 
@@ -20,10 +22,16 @@ export const ProfilePage = () => {
 	}
 
 	if (progress.isError || !progress.data) {
-		return <Alert style={{ margin: 24 }} type='error' message='Не удалось загрузить профиль' />;
+		return (
+			<Alert
+				style={{ margin: 24 }}
+				type='error'
+				message='Не удалось загрузить профиль'
+			/>
+		);
 	}
 
-	const coins = user?.coins ?? progress.data.coins ?? 0;
+	const coins = progress.data.coins ?? 0;
 	const roleLabelByRole = {
 		student: 'Ученик',
 		parent: 'Родитель',
@@ -43,7 +51,7 @@ export const ProfilePage = () => {
 				<Row gutter={[16, 16]}>
 					<Col xs={24} lg={10}>
 						<XPDisplay />
-						<Card style={{ marginTop: 16, borderColor: palette.pink }}>
+						<BaseCard style={{ marginTop: 16 }}>
 							<Title level={5} style={{ color: palette.navy }}>
 								Пользователь
 							</Title>
@@ -56,7 +64,9 @@ export const ProfilePage = () => {
 								showCoins
 								subtitle={roleLabel}
 							/>
-							<Text style={{ display: 'block', color: palette.navy, marginTop: 12 }}>
+							<Text
+								style={{ display: 'block', color: palette.navy, marginTop: 12 }}
+							>
 								Почта: {user?.email}
 							</Text>
 							<Row gutter={12} style={{ marginTop: 12 }}>
@@ -70,27 +80,32 @@ export const ProfilePage = () => {
 									/>
 								</Col>
 							</Row>
-						</Card>
+						</BaseCard>
+						<div style={{ marginTop: 16 }}>
+							<ParentLinkForm />
+						</div>
 					</Col>
 
 					<Col xs={24} lg={14}>
-						<Card
+						<BaseCard
 							title='Достижения'
-							style={{ borderColor: palette.pink }}
-							styles={{ header: { borderBottom: 'none', color: palette.navy } }}
+							styles={{ header: { borderBottom: 'none' } }}
 						>
 							{achievements.isLoading && <Spin />}
-							{!achievements.isLoading && (achievements.data ?? []).length === 0 && (
-								<Empty description='Пока нет достижений' />
-							)}
+							{!achievements.isLoading &&
+								(achievements.data ?? []).length === 0 && (
+									<Empty description='Пока нет достижений' />
+								)}
 							<Row gutter={[12, 12]}>
 								{(achievements.data ?? []).map((achievement) => (
 									<Col key={achievement.id} xs={24} md={12}>
-										<Card size='small'>
+										<BaseCard size='small'>
 											<Text strong style={{ color: palette.navy }}>
 												{achievement.title}
 											</Text>
-											<div style={{ color: palette.textSecondary, marginTop: 6 }}>
+											<div
+												style={{ color: palette.textSecondary, marginTop: 6 }}
+											>
 												{achievement.description ||
 													'Достижение открывается по мере прогресса'}
 											</div>
@@ -100,11 +115,11 @@ export const ProfilePage = () => {
 														+{achievement.reward_coins} монет
 													</Tag>
 												)}
-										</Card>
+										</BaseCard>
 									</Col>
 								))}
 							</Row>
-						</Card>
+						</BaseCard>
 
 						<div style={{ marginTop: 16 }}>
 							<ShopPanel coins={coins} />
@@ -115,3 +130,4 @@ export const ProfilePage = () => {
 		</div>
 	);
 };
+

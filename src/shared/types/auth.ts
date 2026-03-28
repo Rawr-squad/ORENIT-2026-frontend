@@ -6,7 +6,6 @@ export type User = {
 	nickname: string;
 	role: Role;
 	xp?: number;
-	coins?: number;
 	avatar_url?: string;
 	nickname_color?: string;
 	custom_status?: string;

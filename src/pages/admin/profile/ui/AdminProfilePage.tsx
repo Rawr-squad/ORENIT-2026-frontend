@@ -1,4 +1,15 @@
-import { Alert, App, Button, Card, Empty, Input, List, Space, Spin, Tag, Typography } from 'antd';
+import {
+	Alert,
+	App,
+	Button,
+	Empty,
+	Input,
+	List,
+	Space,
+	Spin,
+	Tag,
+	Typography,
+} from 'antd';
 import { useState } from 'react';
 import { usePendingCodeAttempts } from '@/features/admin/review/api/usePendingCodeAttempts';
 import { useReviewCodeAttempt } from '@/features/admin/review/api/useReviewCodeAttempt';
@@ -6,6 +17,7 @@ import { palette } from '@/shared/config/theme';
 import { Markdown } from '@/shared/ui/Markdown';
 import { PageHeader } from '@/shared/ui/layout/PageHeader';
 import { UserIdentity } from '@/shared/ui/user/UserIdentity';
+import { BaseCard } from '@/shared/ui/card/BaseCard';
 
 const { Text } = Typography;
 
@@ -22,7 +34,9 @@ const parseCodeAnswer = (answer: string) => {
 		// noop
 	}
 
-	const fencedMatch = answer.match(/^```([a-z0-9#+-]+)?\r?\n([\s\S]*?)\r?\n```$/i);
+	const fencedMatch = answer.match(
+		/^```([a-z0-9#+-]+)?\r?\n([\s\S]*?)\r?\n```$/i,
+	);
 	if (fencedMatch) {
 		return {
 			language: fencedMatch[1]?.trim() || 'код',
@@ -40,7 +54,9 @@ export const AdminProfilePage = () => {
 	const { message } = App.useApp();
 	const pending = usePendingCodeAttempts();
 	const review = useReviewCodeAttempt();
-	const [feedbackByAttempt, setFeedbackByAttempt] = useState<Record<number, string>>({});
+	const [feedbackByAttempt, setFeedbackByAttempt] = useState<
+		Record<number, string>
+	>({});
 
 	if (pending.isLoading) {
 		return <Spin style={{ marginTop: 48, marginLeft: 24 }} />;
@@ -61,10 +77,12 @@ export const AdminProfilePage = () => {
 			<PageHeader
 				title='Центр проверки кода'
 				subtitle='Проверяйте решения учеников и отмечайте результат'
-				rightSlot={<Tag color='processing'>{pending.data?.length ?? 0} на проверке</Tag>}
+				rightSlot={
+					<Tag color='processing'>{pending.data?.length ?? 0} на проверке</Tag>
+				}
 			/>
 			<div style={{ padding: 24 }}>
-				<Card style={{ borderColor: palette.pink }}>
+				<BaseCard>
 					{(pending.data ?? []).length === 0 ? (
 						<Empty description='Нет отправленных кодовых решений на проверке' />
 					) : (
@@ -75,8 +93,12 @@ export const AdminProfilePage = () => {
 
 								return (
 									<List.Item>
-										<Card style={{ width: '100%', borderColor: palette.borderSoft }}>
-											<Space orientation='vertical' size={10} style={{ width: '100%' }}>
+										<BaseCard style={{ width: '100%' }}>
+											<Space
+												orientation='vertical'
+												size={10}
+												style={{ width: '100%' }}
+											>
 												<Space wrap>
 													<Tag>Попытка #{attempt.id}</Tag>
 													<Tag color='blue'>Задание #{attempt.task_id}</Tag>
@@ -152,7 +174,9 @@ export const AdminProfilePage = () => {
 																		});
 																	},
 																	onError: () =>
-																		message.error('Не удалось отправить проверку'),
+																		message.error(
+																			'Не удалось отправить проверку',
+																		),
 																},
 															);
 														}}
@@ -179,7 +203,9 @@ export const AdminProfilePage = () => {
 																		});
 																	},
 																	onError: () =>
-																		message.error('Не удалось отправить проверку'),
+																		message.error(
+																			'Не удалось отправить проверку',
+																		),
 																},
 															);
 														}}
@@ -188,14 +214,15 @@ export const AdminProfilePage = () => {
 													</Button>
 												</Space>
 											</Space>
-										</Card>
+										</BaseCard>
 									</List.Item>
 								);
 							}}
 						/>
 					)}
-				</Card>
+				</BaseCard>
 			</div>
 		</div>
 	);
 };
+

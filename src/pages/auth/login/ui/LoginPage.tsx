@@ -1,4 +1,4 @@
-import { Button, Card, Form, Input, Typography } from 'antd';
+import { Button, Form, Input, Typography } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useLogin } from '@/features/auth/api/useLogin';
@@ -6,6 +6,7 @@ import { useAuthStore } from '@/entities/user/model/auth.store';
 import type { LoginRequest } from '@/shared/types/auth';
 import { palette } from '@/shared/config/theme';
 import { getRoleHomePath } from '@/shared/lib/get-role-home-path';
+import { BaseCard } from '@/shared/ui/card/BaseCard';
 
 const { Title, Text } = Typography;
 
@@ -39,7 +40,7 @@ export const LoginPage = () => {
 					'radial-gradient(circle at top right, #F8FFA1 0%, #FFFDF5 40%, #F6D8EE 100%)',
 			}}
 		>
-			<Card
+			<BaseCard
 				style={{
 					width: '100%',
 					maxWidth: 440,
@@ -60,7 +61,10 @@ export const LoginPage = () => {
 					<Form.Item
 						name='email'
 						label='Почта'
-						rules={[{ required: true, type: 'email' }]}
+						rules={[
+							{ required: true, message: 'Введите email' },
+							{ type: 'email', message: 'Некорректный email' },
+						]}
 					>
 						<Input placeholder='student@example.com' />
 					</Form.Item>
@@ -68,7 +72,13 @@ export const LoginPage = () => {
 					<Form.Item
 						name='password'
 						label='Пароль'
-						rules={[{ required: true, min: 6 }]}
+						rules={[
+							{
+								required: true,
+								min: 6,
+								message: 'Длина пароля должна быть не менее 6 символов',
+							},
+						]}
 					>
 						<Input.Password placeholder='********' />
 					</Form.Item>
@@ -84,10 +94,17 @@ export const LoginPage = () => {
 					</Button>
 				</Form>
 
-				<div style={{ marginTop: 14, textAlign: 'center', color: palette.textSecondary }}>
+				<div
+					style={{
+						marginTop: 14,
+						textAlign: 'center',
+						color: palette.textSecondary,
+					}}
+				>
 					Новый пользователь? <Link to='/register'>Создать аккаунт</Link>
 				</div>
-			</Card>
+			</BaseCard>
 		</div>
 	);
 };
+

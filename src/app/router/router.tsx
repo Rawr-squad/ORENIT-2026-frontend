@@ -9,9 +9,9 @@ const LazyRoleHomeRedirect = lazy(async () => {
 	return { default: module.RoleHomeRedirect };
 });
 
-const LazyAppShell = lazy(async () => {
-	const module = await import('@/shared/ui/layout/AppShell');
-	return { default: module.AppShell };
+const LazyAppLayout = lazy(async () => {
+	const module = await import('@/shared/ui/layout/AppLayout');
+	return { default: module.AppLayout };
 });
 
 const LazyLoginPage = lazy(async () => {
@@ -60,7 +60,8 @@ const LazyLeaderboardPage = lazy(async () => {
 });
 
 const LazyParentDashboardPage = lazy(async () => {
-	const module = await import('@/pages/parent/dashboard/ui/ParentDashboardPage');
+	const module =
+		await import('@/pages/parent/dashboard/ui/ParentDashboardPage');
 	return { default: module.ParentDashboardPage };
 });
 
@@ -94,6 +95,23 @@ const LazyAdminProfilePage = lazy(async () => {
 	return { default: module.AdminProfilePage };
 });
 
+// Новые страницы
+const LazyAdminShopPage = lazy(async () => {
+	const module = await import('@/pages/admin/shop/ui/AdminShopPage');
+	return { default: module.AdminShopPage };
+});
+
+const LazyAdminAchievementsPage = lazy(async () => {
+	const module =
+		await import('@/pages/admin/achievements/ui/AdminAchievementsPage');
+	return { default: module.AdminAchievementsPage };
+});
+
+const LazyStudentShopPage = lazy(async () => {
+	const module = await import('@/pages/student/shop/ui/StudentShopPage');
+	return { default: module.StudentShopPage };
+});
+
 const renderLazy = (Component: ComponentType) => (
 	<Suspense fallback={<Spin style={{ marginTop: 48, marginLeft: 24 }} />}>
 		<Component />
@@ -114,7 +132,7 @@ export const router = createBrowserRouter([
 		element: renderLazy(LazyRegisterPage),
 	},
 	{
-		element: <ProtectedRoute>{renderLazy(LazyAppShell)}</ProtectedRoute>,
+		element: renderLazy(LazyAppLayout),
 		children: [
 			{
 				path: '/student/dashboard',
@@ -161,6 +179,14 @@ export const router = createBrowserRouter([
 				element: (
 					<ProtectedRoute roles={['student']}>
 						{renderLazy(LazyLeaderboardPage)}
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: '/student/shop',
+				element: (
+					<ProtectedRoute roles={['student']}>
+						{renderLazy(LazyStudentShopPage)}
 					</ProtectedRoute>
 				),
 			},
@@ -220,6 +246,23 @@ export const router = createBrowserRouter([
 					</ProtectedRoute>
 				),
 			},
+			// Новые маршруты
+			{
+				path: '/admin/shop',
+				element: (
+					<ProtectedRoute roles={['admin']}>
+						{renderLazy(LazyAdminShopPage)}
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: '/admin/achievements',
+				element: (
+					<ProtectedRoute roles={['admin']}>
+						{renderLazy(LazyAdminAchievementsPage)}
+					</ProtectedRoute>
+				),
+			},
 		],
 	},
 	{
@@ -227,3 +270,4 @@ export const router = createBrowserRouter([
 		element: renderLazy(LazyNotFoundPage),
 	},
 ]);
+

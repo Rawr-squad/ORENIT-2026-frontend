@@ -1,12 +1,14 @@
-﻿import { create } from 'zustand';
+﻿import type { ProgressResponse } from '@/features/progress/api/progress.types';
+import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 type UserState = {
 	xp: number;
 	level: number;
 	completedLessons: number;
+	progress: ProgressResponse | null;
 
-	setProgress: (xp: number, completedLessons: number) => void;
+	setProgress: (progress: ProgressResponse) => void;
 };
 
 export const useUserStore = create<UserState>()(
@@ -15,15 +17,10 @@ export const useUserStore = create<UserState>()(
 			xp: 0,
 			level: 1,
 			completedLessons: 0,
+			progress: null,
 
-			setProgress: (xp, completedLessons) => {
-				const level = Math.floor(xp / 100) + 1;
-
-				set({
-					xp,
-					level,
-					completedLessons,
-				});
+			setProgress: (progress: ProgressResponse) => {
+				set(progress);
 			},
 		}),
 		{
