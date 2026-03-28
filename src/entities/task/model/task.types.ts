@@ -33,6 +33,7 @@ export type TaskCreate = {
 	lesson_id: number;
 	type: TaskType;
 	question: string;
+	options: null | string[];
 	correct_answer: string | null;
 	coins: number;
 };

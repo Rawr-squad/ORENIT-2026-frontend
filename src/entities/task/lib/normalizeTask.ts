@@ -1,53 +1,26 @@
-import type { Task } from '../model/task.types';
+export type TaskType = 'quiz' | 'input' | 'code';
 
-type RawTask = Record<string, unknown>;
+export interface Task {
+	id: number;
+	type: TaskType;
+	question: string;
+	options?: string[] | null;
+	coins: number;
+}
 
-export const normalizeTask = (raw: RawTask): Task => {
-	const base = {
-		id: Number(raw.id),
-		type: raw.type as Task['type'],
+export const normalizeTask = (raw: any): Task => {
+	return {
+		// фикс: поддержка id / task_id
+		id: Number(raw.id ?? raw.task_id),
+
+		// фикс: нормализация типа
+		type: String(raw.type).toLowerCase() as TaskType,
+
 		question: String(raw.question ?? ''),
+
+		options: Array.isArray(raw.options) ? raw.options : null,
+
 		coins: Number(raw.coins ?? 0),
 	};
-
-	if (raw.type === 'quiz') {
-		let options: string[] = [];
-
-		// 1. норм вариант
-		if (Array.isArray(raw.options)) {
-			options = raw.options.map(String);
-		}
-
-		// 2. строка JSON
-		else if (typeof raw.options === 'string') {
-			try {
-				const parsed = JSON.parse(raw.options);
-				if (Array.isArray(parsed)) {
-					options = parsed.map(String);
-				}
-			} catch {}
-		}
-
-		// 3. из correct_answer (частый бек-костыль)
-		else if (typeof raw.correct_answer === 'string') {
-			try {
-				const parsed = JSON.parse(raw.correct_answer);
-				if (Array.isArray(parsed)) {
-					options = parsed.map(String);
-				}
-			} catch {}
-		}
-
-		return {
-			...base,
-			type: 'quiz',
-			options,
-		};
-	}
-
-	if (raw.type === 'code') {
-		return { ...base, type: 'code' };
-	}
-
-	return { ...base, type: 'input' };
 };
+

@@ -77,185 +77,203 @@ export const DashboardPage = () => {
 	);
 
 	return (
-		<div style={{ width: '100%' }}>
+		<div>
 			<PageHeader
 				title={`Привет, ${user?.nickname ?? 'ученик'}!`}
 				subtitle={`Уровень ${level}`}
 				rightSlot={<Tag color='processing'>{xp} XP</Tag>}
 			/>
-
-			<Row gutter={[16, 16]} style={{ padding: 24 }}>
-				{/* LEFT */}
-				<Col xs={24} lg={16}>
-					{/* LEVEL BLOCK */}
-					<BaseCard
-						style={{
-							marginBottom: 20,
-							background:
-								'linear-gradient(135deg, #FFFDF5 0%, #F8FFA1 52%, #F6D8EE 100%)',
-						}}
-					>
-						<Row justify='space-between' align='middle'>
-							<div>
-								<Text style={{ color: palette.textSecondary }}>
-									Твой уровень
-								</Text>
-
-								<Title level={2} style={{ margin: 0 }}>
-									{level}
-								</Title>
-
-								<Text>До следующего уровня: {100 - percent} XP</Text>
-							</div>
-
-							<Tag style={{ fontSize: 16 }}>{xp} XP</Tag>
-						</Row>
-
-						<Progress
-							percent={percent}
-							showInfo={false}
-							style={{ marginTop: 12 }}
-						/>
-					</BaseCard>
-
-					{/* PROGRESS */}
-					<BaseCard style={{ marginBottom: 20 }}>
-						<Text>Прогресс по урокам</Text>
-
-						<div
+			<div style={{ padding: 24 }}>
+				<Row
+					gutter={[16, 16]}
+					style={{ padding: 12, margin: 0, alignItems: 'stretch' }}
+				>
+					{/* LEFT */}
+					<Col xs={24} lg={16}>
+						{/* LEVEL BLOCK */}
+						<BaseCard
 							style={{
-								height: 14,
-								borderRadius: 999,
-								overflow: 'hidden',
-								display: 'flex',
-								marginTop: 8,
-								background: '#f2f4fb',
+								marginBottom: 20,
+								background:
+									'linear-gradient(135deg, #FFFDF5 0%, #F8FFA1 52%, #F6D8EE 100%)',
 							}}
 						>
-							<div
-								style={{
-									width: `${completedPercent}%`,
-									background: '#7AC77A',
-								}}
-							/>
-							<div
-								style={{
-									width: `${startedPercent}%`,
-									background: '#F6D8AA',
-								}}
-							/>
-							<div
-								style={{
-									width: `${notStartedPercent}%`,
-									background: '#D8DEF5',
-								}}
-							/>
-						</div>
-					</BaseCard>
-
-					{/* ACTIONS */}
-					<Row gutter={[12, 12]} style={{ marginBottom: 20 }}>
-						{/* RECOMMENDATION */}
-						<Col xs={24} md={12}>
-							<BaseCard>
-								<Text strong>Рекомендованный урок:</Text>
-
-								{nextRecommendation.isLoading && <Spin size='small' />}
-
-								{!!nextRecommendation.data?.lesson_id && (
-									<Button
-										type='link'
-										onClick={() =>
-											navigate(
-												`/student/lessons/${nextRecommendation.data.lesson_id}`,
-											)
-										}
-									>
-										{nextRecommendation.data.title ??
-											`Урок #${nextRecommendation.data.lesson_id}`}
-									</Button>
-								)}
-							</BaseCard>
-						</Col>
-
-						{/* DAILY REWARD */}
-						<Col xs={24} md={12}>
-							<BaseCard>
-								<Text strong>Ежедневная награда</Text>
-
-								<Button
-									type='primary'
-									loading={claimDailyReward.isPending}
-									onClick={() => {
-										claimDailyReward.mutate(undefined, {
-											onSuccess: () => message.success('Награда получена'),
-											onError: () => message.error('Ошибка получения награды'),
-										});
-									}}
-									style={{ marginTop: 8 }}
-								>
-									Получить
-								</Button>
-							</BaseCard>
-						</Col>
-					</Row>
-
-					{/* WEAK LESSONS */}
-					<Title level={4}>Слабые места</Title>
-
-					<Row gutter={[12, 12]}>
-						{(weakLessons.data ?? []).map((item) => (
-							<Col xs={24} md={12} lg={8} key={item.lesson_id}>
-								<BaseCard size='small'>
-									<Text strong>
-										{item.lesson_title || `Урок #${item.lesson_id}`}
+							<Row justify='space-between' align='middle'>
+								<div>
+									<Text style={{ color: palette.textSecondary }}>
+										Твой уровень
 									</Text>
 
-									<div style={{ marginTop: 6 }}>
-										<Tag color='error'>Ошибок: {item.wrong_attempts}</Tag>
-									</div>
+									<Title level={2} style={{ margin: 0 }}>
+										{level}
+									</Title>
 
-									<Button
-										type='link'
-										onClick={() =>
-											navigate(`/student/lessons/${item.lesson_id}`)
-										}
+									<Text>До следующего уровня: {100 - percent} XP</Text>
+								</div>
+
+								<Tag style={{ fontSize: 16 }}>{xp} XP</Tag>
+							</Row>
+
+							<Progress
+								percent={percent}
+								showInfo={false}
+								style={{ marginTop: 12 }}
+							/>
+						</BaseCard>
+
+						{/* PROGRESS */}
+						<BaseCard style={{ marginBottom: 20 }}>
+							<Text>Прогресс по урокам</Text>
+
+							<div
+								style={{
+									height: 14,
+									borderRadius: 999,
+									overflow: 'hidden',
+									display: 'flex',
+									marginTop: 8,
+									background: '#f2f4fb',
+								}}
+							>
+								<div
+									style={{
+										width: `${completedPercent}%`,
+										background: '#7AC77A',
+									}}
+								/>
+								<div
+									style={{
+										width: `${startedPercent}%`,
+										background: '#F6D8AA',
+									}}
+								/>
+								<div
+									style={{
+										width: `${notStartedPercent}%`,
+										background: '#D8DEF5',
+									}}
+								/>
+							</div>
+						</BaseCard>
+
+						{/* ACTIONS */}
+						<Row gutter={[12, 12]} style={{ marginBottom: 20 }}>
+							{/* RECOMMENDATION */}
+							<Col xs={24} md={12}>
+								<BaseCard>
+									<Text strong>Рекомендованный урок:</Text>
+
+									{nextRecommendation.isLoading && <Spin size='small' />}
+
+									{!!nextRecommendation.data?.lesson_id && (
+										<Button
+											type='link'
+											onClick={() =>
+												navigate(
+													`/student/lessons/${nextRecommendation.data.lesson_id}`,
+												)
+											}
+										>
+											{nextRecommendation.data.title ??
+												`Урок #${nextRecommendation.data.lesson_id}`}
+										</Button>
+									)}
+								</BaseCard>
+							</Col>
+
+							{/* DAILY REWARD */}
+							<Col xs={24} md={12}>
+								<BaseCard>
+									<div
+										style={{
+											display: 'flex',
+											justifyContent: 'space-between',
+											alignItems: 'center',
+										}}
 									>
-										Перейти
-									</Button>
+										<Text strong>Ежедневная награда</Text>
+
+										<Button
+											type='primary'
+											loading={claimDailyReward.isPending}
+											onClick={() => {
+												claimDailyReward.mutate(undefined, {
+													onSuccess: () => message.success('Награда получена'),
+													onError: () =>
+														message.error('Ошибка получения награды'),
+												});
+											}}
+											style={{ color: palette.text }}
+										>
+											Получить
+										</Button>
+									</div>
 								</BaseCard>
 							</Col>
-						))}
-					</Row>
+						</Row>
 
-					{/* COURSES */}
-					<Title level={4} style={{ marginTop: 20 }}>
-						Курсы
-					</Title>
+						{/* WEAK LESSONS */}
+						<Title level={4}>Слабые места</Title>
 
-					<Row gutter={[16, 16]}>
-						{(courses ?? []).map((course: CoursePreview) => (
-							<Col key={course.id} xs={24} md={12} lg={8}>
-								<BaseCard
-									hoverable
-									onClick={() => navigate(`/student/courses/${course.id}`)}
-								>
-									<Title level={4}>{course.title}</Title>
+						<Row gutter={[12, 12]}>
+							{(weakLessons.data ?? []).map((item) => (
+								<Col xs={24} md={12} lg={8} key={item.lesson_id}>
+									<BaseCard size='small'>
+										<Text strong>
+											{item.lesson_title || `Урок #${item.lesson_id}`}
+										</Text>
 
-									<Markdown content={course.description} />
-								</BaseCard>
-							</Col>
-						))}
-					</Row>
-				</Col>
+										<div style={{ marginTop: 6 }}>
+											<Tag color='error'>Ошибок: {item.wrong_attempts}</Tag>
+										</div>
 
-				{/* CHAT */}
-				<Col xs={24} lg={8}>
-					<div style={{ height: 400 }}>
-						<ChatWidget />
-					</div>
-				</Col>
-			</Row>
+										<Button
+											type='link'
+											onClick={() =>
+												navigate(`/student/lessons/${item.lesson_id}`)
+											}
+										>
+											Перейти
+										</Button>
+									</BaseCard>
+								</Col>
+							))}
+						</Row>
+
+						{/* COURSES */}
+						<Title level={4} style={{ marginTop: 20 }}>
+							Курсы
+						</Title>
+
+						<Row gutter={[16, 16]}>
+							{(courses ?? []).map((course: CoursePreview) => (
+								<Col key={course.id} xs={24} md={12} lg={8}>
+									<BaseCard
+										hoverable
+										onClick={() => navigate(`/student/courses/${course.id}`)}
+									>
+										<Title level={4}>{course.title}</Title>
+
+										<Markdown content={course.description} />
+									</BaseCard>
+								</Col>
+							))}
+						</Row>
+					</Col>
+
+					{/* CHAT */}
+					<Col xs={24} lg={8}>
+						<div
+							style={{
+								height: 'calc(100vh - 140px)', // адаптивная высота
+								minHeight: 300,
+							}}
+						>
+							<ChatWidget />
+						</div>
+					</Col>
+				</Row>
+			</div>
 		</div>
 	);
 };

@@ -353,26 +353,14 @@ export const AdminCourseDetailPage = () => {
 		if (values.type === 'code') {
 			correctAnswer = null;
 		} else if (values.type === 'quiz') {
-			const options = (values.options ?? [])
-				.map((option) => option.trim())
-				.filter((option) => option.length > 0);
-
-			if (options.length < 2) {
-				message.error('В тесте должно быть минимум два варианта ответа');
-				return;
-			}
-
-			const correct = values.quiz_correct_option?.trim();
-			if (!correct) {
+			correctAnswer = values.quiz_correct_option?.trim() ?? '';
+			if (!correctAnswer) {
 				message.error('Укажите правильный вариант ответа');
-				return;
 			}
-
-			correctAnswer = JSON.stringify({ options, correct });
 		} else {
 			correctAnswer = values.correct_answer?.trim() ?? '';
 			if (!correctAnswer) {
-				message.error('Укажите правильный ответ для задания с вводом');
+				message.error('Укажите правильный ответ');
 				return;
 			}
 		}
@@ -383,6 +371,11 @@ export const AdminCourseDetailPage = () => {
 			question: values.question,
 			correct_answer: correctAnswer,
 			coins: values.coins,
+
+			options:
+				values.type === 'quiz'
+					? (values.options ?? []).map((o) => o.trim()).filter(Boolean)
+					: null,
 		};
 
 		if (taskModal.editingId) {
@@ -582,39 +575,41 @@ export const AdminCourseDetailPage = () => {
 								<Empty description='Задание еще не создано' />
 							)}
 							{primaryTask && (
-								<BaseCard
-									size='small'
-									style={{ cursor: 'pointer' }}
-									onClick={openEditTask}
-								>
-									<Space
-										orientation='vertical'
-										size={6}
-										style={{ width: '100%' }}
-									>
-										<Space>
-											<Tag>{taskTypeLabel[primaryTask.type]}</Tag>
-											<Tag color='processing'>
-												{primaryTask.coins ?? 0} монет
-											</Tag>
-										</Space>
-										<Text strong style={{ color: palette.navy }}>
-											{primaryTask.question}
-										</Text>
-										<Popconfirm
-											title='Удалить задание?'
-											onConfirm={() => deleteTask.mutate(primaryTask.id)}
+								<BaseCard size='small'>
+									<div onClick={openEditTask} style={{ cursor: 'pointer' }}>
+										<Space
+											orientation='vertical'
+											size={6}
+											style={{ width: '100%' }}
 										>
-											<Tooltip title='Удалить задание'>
-												<Button
-													type='text'
-													danger
-													icon={<DeleteOutlined />}
-													onClick={(event) => event.stopPropagation()}
-												/>
-											</Tooltip>
-										</Popconfirm>
-									</Space>
+											<Space>
+												<Tag>{taskTypeLabel[primaryTask.type]}</Tag>
+												<Tag color='processing'>
+													{primaryTask.coins ?? 0} монет
+												</Tag>
+											</Space>
+											<Text strong style={{ color: palette.navy }}>
+												{primaryTask.question}
+											</Text>
+											<Popconfirm
+												title='Удалить задание?'
+												onConfirm={(e) => {
+													e?.stopPropagation();
+													deleteTask.mutate(primaryTask.id);
+												}}
+												onCancel={(e) => e?.stopPropagation()}
+											>
+												<Tooltip title='Удалить задание'>
+													<Button
+														type='text'
+														danger
+														icon={<DeleteOutlined />}
+														onClick={(e) => e.stopPropagation()}
+													/>
+												</Tooltip>
+											</Popconfirm>
+										</Space>
+									</div>
 								</BaseCard>
 							)}
 							{extraTasks.length > 0 && (

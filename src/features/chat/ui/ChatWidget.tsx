@@ -15,6 +15,7 @@ type Message = {
 export const ChatWidget = () => {
 	const user = useAuthStore((s) => s.user);
 
+	const [isConnected, setIsConnected] = useState(false);
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [input, setInput] = useState('');
 
@@ -25,28 +26,57 @@ export const ChatWidget = () => {
 		if (connectedRef.current) return;
 		connectedRef.current = true;
 
-		connectChat();
+		const socket = connectChat();
+
+		socket.onopen = () => {
+			console.log('WS connected');
+			setIsConnected(true);
+		};
+
+		socket.onerror = (e: any) => {
+			console.error('WS error', e);
+		};
 
 		const unsubscribe = subscribeChat((raw: any) => {
-			if (raw.type !== 'message') return;
+			if (!raw) return;
 
-			let parsedText = raw.text;
+			console.log('WS:', raw);
 
-			try {
-				const inner = JSON.parse(raw.text);
-				parsedText = inner.message;
-			} catch {}
+			if (raw.type === 'system') {
+				setMessages((prev) => [
+					...prev,
+					{
+						id: Date.now().toString(),
+						text: raw.message ?? 'system message',
+						user_id: 0,
+						nickname: 'system',
+					},
+				]);
+				return;
+			}
 
-			setMessages((prev) => [
-				...prev,
-				{
-					id: raw.timestamp,
-					text: parsedText,
-					user_id: raw.user_id,
-					nickname: raw.nickname,
-					nickname_color: raw.nickname_color,
-				},
-			]);
+			if (raw.type === 'message') {
+				let text = raw.text ?? '';
+
+				// фикс JSON-строк
+				if (typeof text === 'string') {
+					try {
+						const parsed = JSON.parse(text);
+						if (parsed?.message) text = parsed.message;
+					} catch {}
+				}
+
+				setMessages((prev) => [
+					...prev,
+					{
+						id: String(raw.timestamp ?? Date.now()),
+						text: String(text),
+						user_id: Number(raw.user_id ?? 0),
+						nickname: raw.nickname ?? 'user',
+						nickname_color: raw.nickname_color ?? null,
+					},
+				]);
+			}
 		});
 
 		return unsubscribe;
@@ -57,9 +87,25 @@ export const ChatWidget = () => {
 	}, [messages]);
 
 	const handleSend = () => {
-		if (!input.trim()) return;
+		const text = input.trim();
+		if (!text) return;
 
-		sendMessage({ message: input });
+		if (!isConnected) {
+			console.warn('WS not connected');
+			return;
+		}
+
+		// optimistic UI (чтобы сразу видно было сообщение)
+		const tempMessage: Message = {
+			id: 'temp-' + Date.now(),
+			text,
+			user_id: user?.id ?? -1,
+			nickname: user?.nickname ?? 'me',
+		};
+
+		setMessages((prev) => [...prev, tempMessage]);
+
+		sendMessage(text);
 		setInput('');
 	};
 
@@ -76,14 +122,13 @@ export const ChatWidget = () => {
 				overflow: 'hidden',
 			}}
 		>
-			{/* сообщения */}
 			<div
 				style={{
 					flex: 1,
 					minHeight: 0,
 					padding: 12,
 					overflowY: 'auto',
-					overflowX: 'hidden', // 💥 убрали горизонтальный скролл
+					overflowX: 'hidden',
 				}}
 			>
 				{messages.map((msg) => {
@@ -104,7 +149,8 @@ export const ChatWidget = () => {
 									borderRadius: 12,
 									background: isMine ? '#D2F8D2' : '#F5F5F5',
 									maxWidth: '70%',
-									wordBreak: 'break-word', // 💥 фикс длинных строк
+									wordBreak: 'break-word',
+									overflowWrap: 'anywhere',
 								}}
 							>
 								<div
@@ -124,7 +170,6 @@ export const ChatWidget = () => {
 				<div ref={bottomRef} />
 			</div>
 
-			{/* input */}
 			<div
 				style={{
 					display: 'flex',
@@ -145,3 +190,4 @@ export const ChatWidget = () => {
 		</div>
 	);
 };
+

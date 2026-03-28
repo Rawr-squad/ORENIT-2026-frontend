@@ -35,6 +35,8 @@ export const QuizTaskComponent = ({ task, lessonId }: Props) => {
 	);
 	const submit = useTaskSubmit();
 
+	console.log(task);
+
 	const options = Array.isArray(task.options) ? task.options : [];
 
 	const handleSubmit = () => {

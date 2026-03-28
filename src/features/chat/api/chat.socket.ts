@@ -39,13 +39,10 @@ export const connectChat = (): WebSocket => {
 	return socket;
 };
 
-export const sendMessage = (payload: { message: string }) => {
-	if (!socket || socket.readyState !== WebSocket.OPEN) {
-		console.warn('WS not ready');
-		return;
-	}
+export const sendMessage = (message: string) => {
+	if (!socket || socket.readyState !== WebSocket.OPEN) return;
 
-	socket.send(JSON.stringify(payload));
+	socket.send(JSON.stringify({ message }));
 };
 
 export const subscribeChat = (handler: (data: any) => void) => {
@@ -55,3 +52,4 @@ export const subscribeChat = (handler: (data: any) => void) => {
 		listeners.delete(handler);
 	};
 };
+
